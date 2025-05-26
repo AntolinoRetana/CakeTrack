@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CakeTrack</string>
+    <string-array name="opciones_rol">
+        <item>admin</item>
+        <item>seller</item>
+        <item>production</item>
+    </string-array>
+
+</resources>
