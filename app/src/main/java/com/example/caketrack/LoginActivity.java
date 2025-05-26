@@ -69,11 +69,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                             // Redirigir según el rol
                                             if ("admin".equals(rol)) {
-                                                startActivity(new Intent(this, RegisterActivity.class));
+                                                startActivity(new Intent(this, MainDashboardActivity.class));
                                             } else if ("seller".equals(rol)) {
-                                                startActivity(new Intent(this, MainActivity.class));
+                                                startActivity(new Intent(this, MainDashboardActivity.class));
                                             } else if ("production".equals(rol)) {
-                                                //startActivity(new Intent(this, ProductionDashboardActivity.class));
+                                                startActivity(new Intent(this, MainDashboardActivity.class));
                                             } else {
                                                 Toast.makeText(this, "Rol no reconocido", Toast.LENGTH_SHORT).show();
                                             }
