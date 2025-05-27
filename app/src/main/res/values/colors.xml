@@ -7,5 +7,6 @@
     <color name="colorAccent">#4CAF50</color> <!-- Verde para botones o confirmaciones -->
     <color name="colorSecondary">#64B5F6</color> <!-- Azul cielo claro -->
     <color name="hintColor">#616161 </color> <!-- Gris oscuro para hint -->
+    <color name="rosaPastel">#F48FB1</color> <!--Color principal (botones, encabezados)	 -->
 
 </resources>
