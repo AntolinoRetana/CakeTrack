@@ -61,6 +61,22 @@
             android:hint="Disponible (1 = sí, 0 = no)"
             android:layout_marginTop="8dp"
             android:inputType="number" />
+        <ImageView
+            android:id="@+id/imageViewPastel"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="16dp"
+            android:background="#DDDDDD"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagen del pastel" />
+
+        <Button
+            android:id="@+id/btnSeleccionarImagen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar imagen desde galería"
+            android:layout_marginTop="8dp"/>
+
 
     </LinearLayout>
 </ScrollView>
