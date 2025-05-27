@@ -13,6 +13,9 @@
         android:theme="@style/Theme.CakeTrack"
         tools:targetApi="31">
         <activity
+            android:name=".Admin.Fragments.FragmentUsuarios"
+            android:exported="false" />
+        <activity
             android:name=".MainDashboardActivity"
             android:exported="false" />
         <activity
