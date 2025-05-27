@@ -12,4 +12,9 @@
         android:id="@+id/nav_clientes"
         android:title="Clientes"
         android:icon="@android:drawable/ic_menu_agenda" />
+    <item
+        android:id="@+id/nav_pasteles"
+        android:title="Pasteles"
+        android:icon="@drawable/cake" />
+        />
 </menu>

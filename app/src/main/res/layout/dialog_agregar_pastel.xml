@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Nombre -->
+        <EditText
+            android:id="@+id/etNombrePastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del pastel"
+            android:inputType="textPersonName" />
+
+        <!-- Descripción -->
+        <EditText
+            android:id="@+id/etDescripcionPastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descripción"
+            android:layout_marginTop="8dp"
+            android:inputType="textMultiLine" />
+
+        <!-- Precio -->
+        <EditText
+            android:id="@+id/etPrecioPastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Precio"
+            android:layout_marginTop="8dp"
+            android:inputType="numberDecimal" />
+
+        <!-- Tamaño -->
+        <EditText
+            android:id="@+id/etTamanoPastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tamaño (ej: Mediano)"
+            android:layout_marginTop="8dp"
+            android:inputType="text" />
+
+        <!-- Cantidad disponible -->
+        <EditText
+            android:id="@+id/etCantidadPastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad disponible"
+            android:layout_marginTop="8dp"
+            android:inputType="number" />
+
+        <!-- Disponible -->
+        <EditText
+            android:id="@+id/etDisponiblePastel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Disponible (1 = sí, 0 = no)"
+            android:layout_marginTop="8dp"
+            android:inputType="number" />
+
+    </LinearLayout>
+</ScrollView>

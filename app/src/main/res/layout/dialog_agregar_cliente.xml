@@ -1,0 +1,42 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText android:id="@+id/etNombreCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre completo" />
+
+        <EditText android:id="@+id/etTelefonoCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Teléfono"
+            android:inputType="phone"
+            android:layout_marginTop="8dp" />
+
+        <EditText android:id="@+id/etDireccionCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dirección"
+            android:layout_marginTop="8dp" />
+
+        <EditText android:id="@+id/etCorreoCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="8dp" />
+
+        <EditText android:id="@+id/etNotasCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Notas adicionales"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>

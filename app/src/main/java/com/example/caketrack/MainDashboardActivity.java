@@ -9,7 +9,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.caketrack.Admin.Fragments.FragmentCliente;
 import com.example.caketrack.Admin.Fragments.FragmentHome;
+import com.example.caketrack.Admin.Fragments.FragmentPastel;
+import com.example.caketrack.Admin.Fragments.FragmentUsuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainDashboardActivity extends AppCompatActivity {
@@ -39,10 +42,12 @@ public class MainDashboardActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 fragment = new FragmentHome();
             } else if (id == R.id.nav_clientes) {
-               // fragment = new FragmentAgregarEstudiante();
+               fragment = new FragmentCliente();
             } else if (id == R.id.nav_usuario) {
-              //  fragment = new FragmentListaEstudiantes();
-
+               fragment = new FragmentUsuario();
+            }
+            else if (id == R.id.nav_pasteles) {
+                fragment = new FragmentPastel();
             }
             return loadFragment(fragment);
         });
