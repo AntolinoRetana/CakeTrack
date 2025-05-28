@@ -12,9 +12,9 @@
 
         <EditText android:id="@+id/etNombreCliente"
             android:layout_width="match_parent"
+            android:hint="Nombre completo"
             android:layout_height="45dp"
             android:background="@drawable/edit_text_redondito"
-            android:hint="Nombre completo"
             android:fontFamily="@font/nunitoprincipal"
             android:paddingLeft="15dp"/>
 

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_input_add"
         android:contentDescription="Agregar Pastel"
-        app:backgroundTint="#FF9800"
+        app:backgroundTint="@color/rosaBotonesEncabezados"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"/>

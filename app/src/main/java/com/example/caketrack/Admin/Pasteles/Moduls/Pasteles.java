@@ -8,11 +8,8 @@ public class Pasteles {
     private String tamano;
     private boolean disponible;
     private int cantidadDisponible;
-    private String imagenUrl; // ← Nuevo campo
 
-
-    // Constructor con todos los campos
-    public Pasteles(String id, String nombrePastel, String descripcion, double precio, String tamano, boolean disponible, int cantidadDisponible, String imagenUrl) {
+    public Pasteles(String id, String nombrePastel, String descripcion, double precio, String tamano, boolean disponible, int cantidadDisponible) {
         this.id = id;
         this.nombrePastel = nombrePastel;
         this.descripcion = descripcion;
@@ -20,17 +17,34 @@ public class Pasteles {
         this.tamano = tamano;
         this.disponible = disponible;
         this.cantidadDisponible = cantidadDisponible;
-        this.imagenUrl = imagenUrl;
     }
 
     public Pasteles() {
     }
 
-    // Constructor vacío requerido por Firebase
-    public Pasteles(String id, String nombre, String descripcion, double precio, String tamano, boolean disponible, int cantidad) {
+    public int getCantidadDisponible() {
+        return cantidadDisponible;
     }
 
-// Getters y setters
+    public void setCantidadDisponible(int cantidadDisponible) {
+        this.cantidadDisponible = cantidadDisponible;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
 
     public String getId() {
         return id;
@@ -48,14 +62,6 @@ public class Pasteles {
         this.nombrePastel = nombrePastel;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public double getPrecio() {
         return precio;
     }
@@ -70,29 +76,5 @@ public class Pasteles {
 
     public void setTamano(String tamano) {
         this.tamano = tamano;
-    }
-
-    public boolean isDisponible() {
-        return disponible;
-    }
-
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
-
-    public int getCantidadDisponible() {
-        return cantidadDisponible;
-    }
-
-    public void setCantidadDisponible(int cantidadDisponible) {
-        this.cantidadDisponible = cantidadDisponible;
-    }
-
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
     }
 }

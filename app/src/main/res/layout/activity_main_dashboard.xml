@@ -10,16 +10,18 @@
     android:padding="16dp">
 
     <!-- Contenedor de fragmentos con estilo moderno -->
+
+    <!-- Menú inferior -->
+
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginBottom="12dp"
+        android:layout_weight="1"
         android:background="@drawable/rounded_container"
         android:elevation="6dp" />
 
-    <!-- Menú inferior -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
