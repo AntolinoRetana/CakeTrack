@@ -103,6 +103,7 @@ public class FragmentReserva extends Fragment {
 
         return view;
     }
+
     private void cargarClientesYPasteles() {
         FirebaseDatabase.getInstance().getReference("clientes")
                 .get()
@@ -148,8 +149,11 @@ public class FragmentReserva extends Fragment {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_agregar_reserva, null);
         Spinner spinnerCliente = dialogView.findViewById(R.id.spinnerCliente);
         Spinner spinnerPastel = dialogView.findViewById(R.id.spinnerPastel);
+        Spinner spinnerEstado = dialogView.findViewById(R.id.spinnerEstado);
         EditText etFecha = dialogView.findViewById(R.id.etFecha);
         EditText etNotas = dialogView.findViewById(R.id.etNotas);
+        EditText etFechaCreacion = dialogView.findViewById(R.id.etFechaCreacion);
+        EditText etPago = dialogView.findViewById(R.id.etPago);
 
         List<String> clienteNombres = new ArrayList<>();
         List<String> pastelNombres = new ArrayList<>();
@@ -162,6 +166,10 @@ public class FragmentReserva extends Fragment {
         spinnerCliente.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, clienteNombres));
         spinnerPastel.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, pastelNombres));
 
+        String[] estados = {"pendiente", "confirmada", "en_produccion", "lista_para_entrega", "entregada", "cancelada"};
+        ArrayAdapter<String> adapterEstado = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, estados);
+        spinnerEstado.setAdapter(adapterEstado);
+
         new AlertDialog.Builder(getContext())
                 .setTitle("Agregar Reserva")
                 .setView(dialogView)
@@ -171,6 +179,9 @@ public class FragmentReserva extends Fragment {
 
                     String fecha = etFecha.getText().toString().trim();
                     String notas = etNotas.getText().toString().trim();
+                    String fechaCreacion = etFechaCreacion.getText().toString().trim();
+                    String estado = spinnerEstado.getSelectedItem().toString();
+                    String pago = etPago.getText().toString().trim();
 
                     String keyCliente = clienteKeys.get(indexCliente);
                     String keyPastel = pastelKeys.get(indexPastel);
@@ -181,7 +192,7 @@ public class FragmentReserva extends Fragment {
                     String id = "reserva" + (listaReservas.size() + 1);
                     String firebaseId = FirebaseDatabase.getInstance().getReference("reservas").push().getKey();
 
-                    Reserva nueva = new Reserva(id, keyCliente, cliente.getNombre(), keyPastel, pastel.getNombrePastel(), fecha, notas);
+                    Reserva nueva = new Reserva(id, keyCliente, cliente.getNombre(), keyPastel, pastel.getNombrePastel(), fechaCreacion, estado, pago, fecha, notas);
 
                     FirebaseDatabase.getInstance().getReference("reservas")
                             .child(firebaseId)

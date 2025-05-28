@@ -1,19 +1,51 @@
 <!-- res/layout/dialog_agregar_reserva.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:padding="16dp"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <Spinner android:id="@+id/spinnerCliente"
-        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Spinner
+        android:id="@+id/spinnerCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <Spinner android:id="@+id/spinnerPastel"
-        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Spinner
+        android:id="@+id/spinnerPastel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <EditText android:id="@+id/etFecha"
+    <EditText
+        android:id="@+id/etFecha"
         android:hint="Fecha (ej: 2025-06-10)"
-        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date" />
 
-    <EditText android:id="@+id/etNotas"
+    <EditText
+        android:id="@+id/etFechaCreacion"
+        android:hint="Fecha de creación (ej: 2025-05-27)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date" />
+
+    <Spinner
+        android:id="@+id/spinnerEstado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <EditText
+        android:id="@+id/etPago"
+        android:hint="Pago (ej: 100.00)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/etNotas"
         android:hint="Notas"
-        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
