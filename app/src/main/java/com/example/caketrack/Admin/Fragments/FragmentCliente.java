@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -119,50 +120,57 @@ public class FragmentCliente extends Fragment {
 
     private void mostrarDialogoAgregarCliente() {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_agregar_cliente, null);
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView)
+                .create();
+
         EditText etNombre = dialogView.findViewById(R.id.etNombreCliente);
         EditText etTelefono = dialogView.findViewById(R.id.etTelefonoCliente);
         EditText etDireccion = dialogView.findViewById(R.id.etDireccionCliente);
         EditText etCorreo = dialogView.findViewById(R.id.etCorreoCliente);
         EditText etNotas = dialogView.findViewById(R.id.etNotasCliente);
+        Button btnGuardar = dialogView.findViewById(R.id.btnGuardar);
+        Button btnCancelar = dialogView.findViewById(R.id.btnCancelar);
 
-        new AlertDialog.Builder(getContext())
-                .setTitle("Agregar Cliente")
-                .setView(dialogView)
-                .setPositiveButton("Guardar", (dialog, which) -> {
-                    String nombre = etNombre.getText().toString().trim();
-                    String telefono = etTelefono.getText().toString().trim();
-                    String direccion = etDireccion.getText().toString().trim();
-                    String correo = etCorreo.getText().toString().trim();
-                    String notas = etNotas.getText().toString().trim();
+        btnGuardar.setOnClickListener(v -> {
+            String nombre = etNombre.getText().toString().trim();
+            String telefono = etTelefono.getText().toString().trim();
+            String direccion = etDireccion.getText().toString().trim();
+            String correo = etCorreo.getText().toString().trim();
+            String notas = etNotas.getText().toString().trim();
 
-                    if (nombre.isEmpty() || telefono.isEmpty()) {
-                        Toast.makeText(getContext(), "Nombre y teléfono son obligatorios", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+            if (nombre.isEmpty() || telefono.isEmpty()) {
+                Toast.makeText(getContext(), "Nombre y teléfono son obligatorios", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                    FirebaseDatabase.getInstance().getReference("clientes")
-                            .get()
-                            .addOnSuccessListener(snapshot -> {
-                                long count = snapshot.getChildrenCount(); // contar clientes existentes
-                                String aliasId = "cliente" + (count + 1);  // ejemplo: cliente6
-                                String firebaseId = FirebaseDatabase.getInstance().getReference("clientes").push().getKey();
+            FirebaseDatabase.getInstance().getReference("clientes")
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        long count = snapshot.getChildrenCount();
+                        String aliasId = "cliente" + (count + 1);
+                        String firebaseId = FirebaseDatabase.getInstance().getReference("clientes").push().getKey();
 
-                                Cliente nuevo = new Cliente(aliasId, nombre, telefono, direccion, correo, notas);
+                        Cliente nuevo = new Cliente(aliasId, nombre, telefono, direccion, correo, notas);
 
-                                FirebaseDatabase.getInstance().getReference("clientes")
-                                        .child(firebaseId)
-                                        .setValue(nuevo)
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(getContext(), "Cliente guardado como " + aliasId, Toast.LENGTH_SHORT).show();
-                                            cargarClientesDesdeFirebase();
-                                        })
-                                        .addOnFailureListener(e ->
-                                                Toast.makeText(getContext(), "Error al guardar", Toast.LENGTH_SHORT).show());
-                            })
-                            .addOnFailureListener(e ->
-                                    Toast.makeText(getContext(), "Error al contar clientes", Toast.LENGTH_SHORT).show());
-                })
-                .setNegativeButton("Cancelar", null)
-                .show(); // 🔧 ESTO IBA FUERA del addOnSuccessListener
+                        FirebaseDatabase.getInstance().getReference("clientes")
+                                .child(firebaseId)
+                                .setValue(nuevo)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getContext(), "Cliente guardado como " + aliasId, Toast.LENGTH_SHORT).show();
+                                    cargarClientesDesdeFirebase();
+                                    dialog.dismiss();
+                                })
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(getContext(), "Error al guardar", Toast.LENGTH_SHORT).show());
+                    })
+                    .addOnFailureListener(e ->
+                            Toast.makeText(getContext(), "Error al contar clientes", Toast.LENGTH_SHORT).show());
+        });
+
+        btnCancelar.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
+
 }

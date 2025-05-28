@@ -76,6 +76,7 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteV
         // Editar
         holder.btnEditar.setOnClickListener(v -> {
             View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_agregar_cliente, null);
+
             EditText etNombre = dialogView.findViewById(R.id.etNombreCliente);
             EditText etTelefono = dialogView.findViewById(R.id.etTelefonoCliente);
             EditText etDireccion = dialogView.findViewById(R.id.etDireccionCliente);
@@ -88,30 +89,36 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteV
             etCorreo.setText(cliente.getCorreo());
             etNotas.setText(cliente.getNotas());
 
-            new AlertDialog.Builder(context)
-                    .setTitle("Editar cliente")
+            AlertDialog dialog = new AlertDialog.Builder(context)
                     .setView(dialogView)
-                    .setPositiveButton("Guardar", (dialog, which) -> {
-                        Cliente actualizado = new Cliente(
-                                etNombre.getText().toString().trim(),
-                                etTelefono.getText().toString().trim(),
-                                etDireccion.getText().toString().trim(),
-                                etCorreo.getText().toString().trim(),
-                                etNotas.getText().toString().trim()
-                        );
+                    .create(); // No uses setPositiveButton aquí
 
-                        FirebaseDatabase.getInstance().getReference("clientes")
-                                .child(uid)
-                                .setValue(actualizado)
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(context, "Cliente actualizado", Toast.LENGTH_SHORT).show();
-                                    listaClientes.set(position, actualizado);
-                                    notifyItemChanged(position);
-                                });
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
+            // Obtener botones del diseño y asignar lógica
+            dialogView.findViewById(R.id.btnGuardar).setOnClickListener(view -> {
+                Cliente actualizado = new Cliente(
+                        etNombre.getText().toString().trim(),
+                        etTelefono.getText().toString().trim(),
+                        etDireccion.getText().toString().trim(),
+                        etCorreo.getText().toString().trim(),
+                        etNotas.getText().toString().trim()
+                );
+
+                FirebaseDatabase.getInstance().getReference("clientes")
+                        .child(uid)
+                        .setValue(actualizado)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(context, "Cliente actualizado", Toast.LENGTH_SHORT).show();
+                            listaClientes.set(position, actualizado);
+                            notifyItemChanged(position);
+                            dialog.dismiss();
+                        });
+            });
+
+            dialogView.findViewById(R.id.btnCancelar).setOnClickListener(view -> dialog.dismiss());
+
+            dialog.show();
         });
+
 
     }
 

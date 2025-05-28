@@ -14,7 +14,7 @@ public class Reserva {
 
         public Reserva() {}
 
-    public Reserva(String id, String clienteId, String clienteNombre, String pastelId, String pastelNombre, String fecha, String fecha_creacion, String estado, String pago, String notas) {
+    public Reserva(String clienteId, String clienteNombre, String pastelId, String pastelNombre, String fecha, String fecha_creacion, String estado, String pago, String notas) {
         this.id = id;
         this.clienteId = clienteId;
         this.clienteNombre = clienteNombre;
@@ -26,6 +26,8 @@ public class Reserva {
         this.pago = pago;
         this.notas = notas;
     }
+
+
 
     public Reserva(String id, String clienteId, String clienteNombre, String pastelId,
                    String pastelNombre, String fecha, String notas) {
