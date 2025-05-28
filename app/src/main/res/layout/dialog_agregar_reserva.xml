@@ -1,0 +1,19 @@
+<!-- res/layout/dialog_agregar_reserva.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="16dp"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <Spinner android:id="@+id/spinnerCliente"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+    <Spinner android:id="@+id/spinnerPastel"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+    <EditText android:id="@+id/etFecha"
+        android:hint="Fecha (ej: 2025-06-10)"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+    <EditText android:id="@+id/etNotas"
+        android:hint="Notas"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+</LinearLayout>

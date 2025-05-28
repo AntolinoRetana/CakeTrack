@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.caketrack.Admin.Fragments.FragmentCliente;
 import com.example.caketrack.Admin.Fragments.FragmentHome;
 import com.example.caketrack.Admin.Fragments.FragmentPastel;
+import com.example.caketrack.Admin.Fragments.FragmentReserva;
 import com.example.caketrack.Admin.Fragments.FragmentUsuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -48,6 +49,9 @@ public class MainDashboardActivity extends AppCompatActivity {
             }
             else if (id == R.id.nav_pasteles) {
                 fragment = new FragmentPastel();
+            }
+            else if (id == R.id.nav_reservas) {
+                fragment = new FragmentReserva();
             }
             return loadFragment(fragment);
         });

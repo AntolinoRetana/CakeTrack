@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "21854496842",
-    "project_id": "pasteleriaapp-73c91",
-    "storage_bucket": "pasteleriaapp-73c91.firebasestorage.app"
+    "project_number": "143513660884",
+    "project_id": "pasteleriaapp-875f4",
+    "storage_bucket": "pasteleriaapp-875f4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:21854496842:android:17b72f7f2d303af502deb3",
+        "mobilesdk_app_id": "1:143513660884:android:d863f119d570de3666fa41",
         "android_client_info": {
           "package_name": "com.example.caketrack"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDtvZ7zuwTazB1roST-NaVQ7fgWIiqv8J8"
+          "current_key": "AIzaSyA7oLXbG5H_nW0UYW724PgbvLqj9Wu8UA4"
         }
       ],
       "services": {

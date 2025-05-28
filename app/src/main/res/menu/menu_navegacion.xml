@@ -20,5 +20,9 @@
         android:title="Pasteles"
         android:fontFamily="@font/nunitoprincipal"
         android:icon="@drawable/cake" />
-        />
+    <item
+        android:id="@+id/nav_reservas"
+        android:title="Reservas"
+        android:fontFamily="@font/nunitoprincipal"
+        android:icon="@android:drawable/ic_menu_agenda" />
 </menu>
