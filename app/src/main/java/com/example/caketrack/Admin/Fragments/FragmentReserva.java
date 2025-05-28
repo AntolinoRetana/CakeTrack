@@ -192,7 +192,7 @@ public class FragmentReserva extends Fragment {
                     String id = "reserva" + (listaReservas.size() + 1);
                     String firebaseId = FirebaseDatabase.getInstance().getReference("reservas").push().getKey();
 
-                    Reserva nueva = new Reserva(id, keyCliente, cliente.getNombre(), keyPastel, pastel.getNombrePastel(), fechaCreacion, estado, pago, fecha, notas);
+                    Reserva nueva = new Reserva(id, keyCliente, cliente.getNombre(), keyPastel, pastel.getNombrePastel(),fecha, fechaCreacion, estado, pago, notas);
 
                     FirebaseDatabase.getInstance().getReference("reservas")
                             .child(firebaseId)
