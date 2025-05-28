@@ -24,9 +24,9 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/rosaBotonesEncabezados"
+        app:itemBackground="@drawable/bottom_nav_item_background"
         app:itemIconTint="@android:color/white"
         app:itemTextColor="@android:color/white"
-        app:itemBackground="@drawable/bottom_nav_item_background"
         app:menu="@menu/menu_navegacion" />
 </LinearLayout>

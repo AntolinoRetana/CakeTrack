@@ -6,37 +6,55 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#FFF8E1"
+>
 
         <EditText android:id="@+id/etNombreCliente"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre completo" />
+            android:layout_height="45dp"
+            android:background="@drawable/edit_text_redondito"
+            android:hint="Nombre completo"
+            android:fontFamily="@font/nunitoprincipal"
+            android:paddingLeft="15dp"/>
 
-        <EditText android:id="@+id/etTelefonoCliente"
+        <EditText
+            android:id="@+id/etTelefonoCliente"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_redondito"
             android:hint="Teléfono"
             android:inputType="phone"
-            android:layout_marginTop="8dp" />
+            android:fontFamily="@font/nunitoprincipal"
+            android:paddingLeft="15dp"/>
 
         <EditText android:id="@+id/etDireccionCliente"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:background="@drawable/edit_text_redondito"
             android:hint="Dirección"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/nunitoprincipal"
+            android:paddingLeft="15dp"/>
 
         <EditText android:id="@+id/etCorreoCliente"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:background="@drawable/edit_text_redondito"
             android:hint="Correo"
             android:inputType="textEmailAddress"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/nunitoprincipal"
+            android:paddingLeft="15dp"/>
 
         <EditText android:id="@+id/etNotasCliente"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:background="@drawable/edit_text_redondito"
             android:hint="Notas adicionales"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/nunitoprincipal"
+            android:paddingLeft="15dp"/>
     </LinearLayout>
 </ScrollView>
