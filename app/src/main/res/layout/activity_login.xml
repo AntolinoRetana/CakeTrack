@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF8E1"
+    android:background="@color/white"
     tools:context=".LoginActivity">
 
     <!-- Cabecera curva -->
@@ -88,6 +88,7 @@
                     android:id="@+id/etUsuario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitoprincipal"
                     android:hint="Usuario" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,6 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Contraseña"
+                    android:fontFamily="@font/nunitoprincipal"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,9 +120,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="@color/rosaPastel"
+                android:backgroundTint="@color/rosaBotonesEncabezados"
                 android:text="Iniciar Sesión"
                 android:textColor="#FFFFFF"
+                android:fontFamily="@font/nunitoprincipal"
+                android:textSize="27dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

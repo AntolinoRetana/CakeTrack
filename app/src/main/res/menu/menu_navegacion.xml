@@ -3,18 +3,22 @@
     <item
         android:id="@+id/nav_home"
         android:title="Inicio"
+        android:fontFamily="@font/nunitoprincipal"
         android:icon="@android:drawable/ic_menu_view" />
     <item
         android:id="@+id/nav_usuario"
         android:title="Usuarios"
+        android:fontFamily="@font/nunitoprincipal"
         android:icon="@android:drawable/ic_input_add" />
     <item
         android:id="@+id/nav_clientes"
         android:title="Clientes"
+        android:fontFamily="@font/nunitoprincipal"
         android:icon="@android:drawable/ic_menu_agenda" />
     <item
         android:id="@+id/nav_pasteles"
         android:title="Pasteles"
+        android:fontFamily="@font/nunitoprincipal"
         android:icon="@drawable/cake" />
         />
 </menu>
