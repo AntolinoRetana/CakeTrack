@@ -86,10 +86,8 @@ public class FragmentPastel extends Fragment {
         EditText etTamano = dialogView.findViewById(R.id.etTamanoPastel);
         EditText etCantidad = dialogView.findViewById(R.id.etCantidadPastel);
         EditText etDisponible = dialogView.findViewById(R.id.etDisponiblePastel);
-        imageViewPreview = dialogView.findViewById(R.id.imageViewPastel);
-        Button btnSeleccionar = dialogView.findViewById(R.id.btnSeleccionarImagen);
 
-        btnSeleccionar.setOnClickListener(v -> abrirGaleria());
+
 
         new AlertDialog.Builder(getContext())
                 .setTitle("Agregar Pastel")
@@ -143,7 +141,7 @@ public class FragmentPastel extends Fragment {
                     String firebaseId = FirebaseDatabase.getInstance().getReference("pasteles").push().getKey();
 
                     Pasteles nuevo = new Pasteles(pastelId, nombre, descripcion, precio, tamano, disponible, cantidad);
-                    nuevo.setImagenUrl(imageUrl);
+
 
                     FirebaseDatabase.getInstance().getReference("pasteles")
                             .child(firebaseId)
