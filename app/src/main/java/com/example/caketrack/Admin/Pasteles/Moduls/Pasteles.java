@@ -8,7 +8,21 @@ public class Pasteles {
     private String tamano;
     private boolean disponible;
     private int cantidadDisponible;
+    private String imageUrl; // Campo para URL de imagen
 
+    // Constructor completo incluyendo imageUrl
+    public Pasteles(String id, String nombrePastel, String descripcion, double precio, String tamano, boolean disponible, int cantidadDisponible, String imageUrl) {
+        this.id = id;
+        this.nombrePastel = nombrePastel;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.tamano = tamano;
+        this.disponible = disponible;
+        this.cantidadDisponible = cantidadDisponible;
+        this.imageUrl = imageUrl;
+    }
+
+    // Constructor sin imageUrl (para compatibilidad)
     public Pasteles(String id, String nombrePastel, String descripcion, double precio, String tamano, boolean disponible, int cantidadDisponible) {
         this.id = id;
         this.nombrePastel = nombrePastel;
@@ -17,64 +31,34 @@ public class Pasteles {
         this.tamano = tamano;
         this.disponible = disponible;
         this.cantidadDisponible = cantidadDisponible;
+        this.imageUrl = ""; // Valor por defecto vacío
     }
 
-    public Pasteles() {
-    }
+    // Constructor vacío requerido por Firebase
+    public Pasteles() {}
 
-    public int getCantidadDisponible() {
-        return cantidadDisponible;
-    }
+    // Getters y Setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public void setCantidadDisponible(int cantidadDisponible) {
-        this.cantidadDisponible = cantidadDisponible;
-    }
+    public String getNombrePastel() { return nombrePastel; }
+    public void setNombrePastel(String nombrePastel) { this.nombrePastel = nombrePastel; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public double getPrecio() { return precio; }
+    public void setPrecio(double precio) { this.precio = precio; }
 
-    public boolean isDisponible() {
-        return disponible;
-    }
+    public String getTamano() { return tamano; }
+    public void setTamano(String tamano) { this.tamano = tamano; }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
+    public boolean isDisponible() { return disponible; }
+    public void setDisponible(boolean disponible) { this.disponible = disponible; }
 
-    public String getId() {
-        return id;
-    }
+    public int getCantidadDisponible() { return cantidadDisponible; }
+    public void setCantidadDisponible(int cantidadDisponible) { this.cantidadDisponible = cantidadDisponible; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNombrePastel() {
-        return nombrePastel;
-    }
-
-    public void setNombrePastel(String nombrePastel) {
-        this.nombrePastel = nombrePastel;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public String getTamano() {
-        return tamano;
-    }
-
-    public void setTamano(String tamano) {
-        this.tamano = tamano;
-    }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

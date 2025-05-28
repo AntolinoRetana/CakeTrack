@@ -81,6 +81,25 @@
             android:layout_marginTop="8dp"
             android:inputType="number" />
 
+        <ImageView
+            android:id="@+id/imageViewPastel"
+            android:layout_width="match_parent"
+            android:layout_height="132dp"
+            android:layout_marginTop="10dp"
+            android:background="#CCCCCC"
+            android:contentDescription="Imagen del pastel"
+            android:scaleType="centerCrop" />
+
+        <Button
+            android:id="@+id/btnSeleccionarImagen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rosaBotonesEncabezados"
+            android:fontFamily="@font/nunitoprincipal"
+            android:text="Seleccionar imagen desde galería"
+            android:layout_marginTop="8dp" />
+
+
 
     </LinearLayout>
 </ScrollView>

@@ -87,30 +87,62 @@ public class FragmentPastel extends Fragment {
         EditText etCantidad = dialogView.findViewById(R.id.etCantidadPastel);
         EditText etDisponible = dialogView.findViewById(R.id.etDisponiblePastel);
 
+        // CORREGIDO: Inicializar las vistas de imagen
+        imageViewPreview = dialogView.findViewById(R.id.imageViewPastel);
+        Button btnSeleccionarImagen = dialogView.findViewById(R.id.btnSeleccionarImagen);
 
+        // CORREGIDO: Resetear la imagen seleccionada para cada nuevo diálogo
+        imageUriSeleccionada = null;
+        imageViewPreview.setImageResource(R.drawable.ic_launcher_background); // Imagen por defecto
+
+        // CORREGIDO: Configurar el click listener del botón
+        btnSeleccionarImagen.setOnClickListener(v -> abrirGaleria());
 
         new AlertDialog.Builder(getContext())
                 .setTitle("Agregar Pastel")
                 .setView(dialogView)
                 .setPositiveButton("Guardar", (dialog, which) -> {
-                    String nombre = etNombre.getText().toString().trim();
-                    String descripcion = etDescripcion.getText().toString().trim();
-                    double precio = Double.parseDouble(etPrecio.getText().toString().trim());
-                    String tamano = etTamano.getText().toString().trim();
-                    int cantidad = Integer.parseInt(etCantidad.getText().toString().trim());
-                    boolean disponible = etDisponible.getText().toString().trim().equals("1");
+                    try {
+                        // CORREGIDO: Validar campos antes de parsear
+                        String nombre = etNombre.getText().toString().trim();
+                        String descripcion = etDescripcion.getText().toString().trim();
+                        String precioStr = etPrecio.getText().toString().trim();
+                        String tamano = etTamano.getText().toString().trim();
+                        String cantidadStr = etCantidad.getText().toString().trim();
+                        String disponibleStr = etDisponible.getText().toString().trim();
 
-                    if (imageUriSeleccionada != null) {
-                        StorageReference ref = FirebaseStorage.getInstance().getReference("pasteles")
-                                .child(System.currentTimeMillis() + ".jpg");
+                        if (nombre.isEmpty() || precioStr.isEmpty() || cantidadStr.isEmpty() || disponibleStr.isEmpty()) {
+                            Toast.makeText(getContext(), "Por favor completa todos los campos obligatorios", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                        ref.putFile(imageUriSeleccionada)
-                                .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
-                                    String url = uri.toString();
-                                    guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, url);
-                                }));
-                    } else {
-                        guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, "");
+                        double precio = Double.parseDouble(precioStr);
+                        int cantidad = Integer.parseInt(cantidadStr);
+                        boolean disponible = disponibleStr.equals("1");
+
+                        if (imageUriSeleccionada != null) {
+                            // Subir imagen y guardar pastel
+                            StorageReference ref = FirebaseStorage.getInstance().getReference("pasteles")
+                                    .child(System.currentTimeMillis() + ".jpg");
+
+                            ref.putFile(imageUriSeleccionada)
+                                    .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
+                                        String url = uri.toString();
+                                        guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, url);
+                                    }))
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(getContext(), "Error al subir imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        // Guardar sin imagen si falla la subida
+                                        guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, "");
+                                    });
+                        } else {
+                            // Guardar sin imagen
+                            guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, "");
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(getContext(), "Error en formato de números. Verifica precio y cantidad.", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "Error al guardar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancelar", null)
@@ -128,7 +160,9 @@ public class FragmentPastel extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUriSeleccionada = data.getData();
-            imageViewPreview.setImageURI(imageUriSeleccionada);
+            if (imageViewPreview != null) {
+                imageViewPreview.setImageURI(imageUriSeleccionada);
+            }
         }
     }
 
@@ -140,16 +174,25 @@ public class FragmentPastel extends Fragment {
                     String pastelId = "pastel" + (count + 1);
                     String firebaseId = FirebaseDatabase.getInstance().getReference("pasteles").push().getKey();
 
+                    // CORREGIDO: Usar el constructor correcto y establecer la URL de imagen
                     Pasteles nuevo = new Pasteles(pastelId, nombre, descripcion, precio, tamano, disponible, cantidad);
+                    nuevo.setImageUrl(imageUrl); // Establecer la URL de imagen
 
-
-                    FirebaseDatabase.getInstance().getReference("pasteles")
-                            .child(firebaseId)
-                            .setValue(nuevo)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(getContext(), "Pastel agregado", Toast.LENGTH_SHORT).show();
-                                cargarPastelesDesdeFirebase();
-                            });
+                    if (firebaseId != null) {
+                        FirebaseDatabase.getInstance().getReference("pasteles")
+                                .child(firebaseId)
+                                .setValue(nuevo)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getContext(), "Pastel agregado exitosamente", Toast.LENGTH_SHORT).show();
+                                    cargarPastelesDesdeFirebase();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getContext(), "Error al guardar en base de datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error al obtener datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 }
