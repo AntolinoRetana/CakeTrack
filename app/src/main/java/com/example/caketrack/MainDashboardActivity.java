@@ -41,12 +41,12 @@ public class MainDashboardActivity extends AppCompatActivity {
             Fragment fragment = null;
             int id = item.getItemId();
 
-            if (id == R.id.nav_home) {
-                fragment = new FragmentHome();
+            if (id == R.id.nav_usuario) {
+                fragment = new FragmentUsuario();
             } else if (id == R.id.nav_clientes) {
                fragment = new FragmentCliente();
-            } else if (id == R.id.nav_usuario) {
-               fragment = new FragmentUsuario();
+            } else if (id == R.id.nav_estado) {
+               fragment = new FragmentHome();
             }
             else if (id == R.id.nav_pasteles) {
                 fragment = new FragmentPastel();
@@ -57,7 +57,7 @@ public class MainDashboardActivity extends AppCompatActivity {
             return loadFragment(fragment);
         });
 
-        bottomNavigation.setSelectedItemId(R.id.nav_home);
+        bottomNavigation.setSelectedItemId(R.id.nav_usuario);
     }
 
     // Cargar el fragmento

@@ -77,13 +77,18 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
             EditText etNotas = dialogView.findViewById(R.id.etNotas);
             Spinner spinnerCliente = dialogView.findViewById(R.id.spinnerCliente);
             Spinner spinnerPastel = dialogView.findViewById(R.id.spinnerPastel);
+            Spinner spinnerEstado = dialogView.findViewById(R.id.spinnerEstado);
+            EditText etFechaCreacion = dialogView.findViewById(R.id.etFechaCreacion);
+            EditText etPago = dialogView.findViewById(R.id.etPago);
 
             etFecha.setText(reserva.getFecha());
             etNotas.setText(reserva.getNotas());
+            etFechaCreacion.setText(reserva.getFecha_creacion());
+            etPago.setText(reserva.getPago());
 
-            // Paso 1: Cargar datos desde Firebase y poblar los spinners
             List<String> listaClientes = new ArrayList<>();
             List<String> listaPasteles = new ArrayList<>();
+            List<String> listaEstados = new ArrayList<>();
 
             ArrayAdapter<String> clienteAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, listaClientes);
             clienteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -93,79 +98,106 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
             pastelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerPastel.setAdapter(pastelAdapter);
 
-            // Cargar clientes
-            FirebaseDatabase.getInstance().getReference("clientes").get().addOnSuccessListener(snapshot -> {
-                listaClientes.clear();
-                for (DataSnapshot clienteSnapshot : snapshot.getChildren()) {
+            ArrayAdapter<String> estadoAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, listaEstados);
+            estadoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerEstado.setAdapter(estadoAdapter);
+
+            // Paso 1: Cargar clientes
+            FirebaseDatabase.getInstance().getReference("clientes").get().addOnSuccessListener(snapshotClientes -> {
+                for (DataSnapshot clienteSnapshot : snapshotClientes.getChildren()) {
                     String nombre = clienteSnapshot.child("nombre").getValue(String.class);
                     if (nombre != null) listaClientes.add(nombre);
                 }
                 clienteAdapter.notifyDataSetChanged();
 
-                // Seleccionar el cliente actual
                 for (int i = 0; i < listaClientes.size(); i++) {
                     if (listaClientes.get(i).equals(reserva.getClienteNombre())) {
                         spinnerCliente.setSelection(i);
                         break;
                     }
                 }
-            });
 
-            // Cargar pasteles
-            FirebaseDatabase.getInstance().getReference("pasteles").get().addOnSuccessListener(snapshot -> {
-                listaPasteles.clear();
-                for (DataSnapshot pastelSnapshot : snapshot.getChildren()) {
-                    String nombre = pastelSnapshot.child("nombre").getValue(String.class);
-                    if (nombre != null) listaPasteles.add(nombre);
-                }
-                pastelAdapter.notifyDataSetChanged();
-
-                // Seleccionar el pastel actual
-                for (int i = 0; i < listaPasteles.size(); i++) {
-                    if (listaPasteles.get(i).equals(reserva.getPastelNombre())) {
-                        spinnerPastel.setSelection(i);
-                        break;
+                // Paso 2: Cargar pasteles
+                FirebaseDatabase.getInstance().getReference("pasteles").get().addOnSuccessListener(snapshotPasteles -> {
+                    for (DataSnapshot pastelSnapshot : snapshotPasteles.getChildren()) {
+                        String nombre = pastelSnapshot.child("nombrePastel").getValue(String.class);
+                        if (nombre != null) listaPasteles.add(nombre);
                     }
-                }
-            });
+                    pastelAdapter.notifyDataSetChanged();
 
-            // Mostrar el diálogo
-            new AlertDialog.Builder(context)
-                    .setTitle("Editar reserva")
-                    .setView(dialogView)
-                    .setPositiveButton("Guardar", (dialog, which) -> {
-                        String nuevaFecha = etFecha.getText().toString().trim();
-                        String nuevasNotas = etNotas.getText().toString().trim();
-                        String nuevoClienteNombre = spinnerCliente.getSelectedItem().toString();
-                        String nuevoPastelNombre = spinnerPastel.getSelectedItem().toString();
-
-                        if (nuevaFecha.isEmpty()) {
-                            Toast.makeText(context, "La fecha no puede estar vacía", Toast.LENGTH_SHORT).show();
-                            return;
+                    for (int i = 0; i < listaPasteles.size(); i++) {
+                        if (listaPasteles.get(i).equals(reserva.getPastelNombre())) {
+                            spinnerPastel.setSelection(i);
+                            break;
                         }
+                    }
 
-                        // ⚠ Aquí podrías mapear los IDs reales si los tienes
-                        Reserva actualizada = new Reserva(
-                                reserva.getClienteId(), // Debes actualizar si cambia
-                                nuevoClienteNombre,
-                                reserva.getPastelId(),  // Debes actualizar si cambia
-                                nuevoPastelNombre,
-                                nuevaFecha,
-                                nuevasNotas
-                        );
+                    // Paso 3: Cargar estados (mejor usar estado predefinido)
+                    listaEstados.clear();
+                    listaEstados.add("Pendiente");
+                    listaEstados.add("Confirmada");
+                    listaEstados.add("Entregada");
+                    listaEstados.add("Cancelada");
+                    estadoAdapter.notifyDataSetChanged();
 
-                        FirebaseDatabase.getInstance().getReference("reservas")
-                                .child(uid)
-                                .setValue(actualizada)
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(context, "Reserva actualizada", Toast.LENGTH_SHORT).show();
-                                    listaReservas.set(position, actualizada);
-                                    notifyItemChanged(position);
-                                });
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
+                    for (int i = 0; i < listaEstados.size(); i++) {
+                        if (listaEstados.get(i).equals(reserva.getEstado())) {
+                            spinnerEstado.setSelection(i);
+                            break;
+                        }
+                    }
+
+                    // Mostrar el diálogo SOLO cuando los 3 spinners están listos
+                    new AlertDialog.Builder(context)
+                            .setTitle("Editar reserva")
+                            .setView(dialogView)
+                            .setPositiveButton("Guardar", (dialog, which) -> {
+                                if (spinnerCliente.getSelectedItem() == null ||
+                                        spinnerPastel.getSelectedItem() == null ||
+                                        spinnerEstado.getSelectedItem() == null) {
+                                    Toast.makeText(context, "No se han cargado los datos aún.", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                String nuevaFecha = etFecha.getText().toString().trim();
+                                String nuevasNotas = etNotas.getText().toString().trim();
+                                String nuevoClienteNombre = spinnerCliente.getSelectedItem().toString();
+                                String nuevoPastelNombre = spinnerPastel.getSelectedItem().toString();
+                                String nuevoEstado = spinnerEstado.getSelectedItem().toString();
+                                String nuevoPago = etPago.getText().toString().trim();
+                                String nuevaFechaCreacion = etFechaCreacion.getText().toString().trim();
+
+                                if (nuevaFecha.isEmpty()) {
+                                    Toast.makeText(context, "La fecha no puede estar vacía", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                Reserva actualizada = new Reserva(
+                                        reserva.getClienteId(),
+                                        nuevoClienteNombre,
+                                        reserva.getPastelId(),
+                                        nuevoPastelNombre,
+                                        nuevaFecha,
+                                        nuevaFechaCreacion,
+                                        nuevoEstado,
+                                        nuevoPago,
+                                        nuevasNotas);
+
+                                FirebaseDatabase.getInstance().getReference("reservas")
+                                        .child(uid)
+                                        .setValue(actualizada)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(context, "Reserva actualizada", Toast.LENGTH_SHORT).show();
+                                            listaReservas.set(position, actualizada);
+                                            notifyItemChanged(position);
+                                        });
+                            })
+                            .setNegativeButton("Cancelar", null)
+                            .show();
+                });
+            });
         });
+
 
 
     }
