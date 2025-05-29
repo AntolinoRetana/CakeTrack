@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -153,6 +154,10 @@ public class FragmentReserva extends Fragment {
 
     private void mostrarDialogoAgregarReserva() {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_agregar_reserva, null);
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView)
+                .create();
+
         Spinner spinnerCliente = dialogView.findViewById(R.id.spinnerCliente);
         Spinner spinnerPastel = dialogView.findViewById(R.id.spinnerPastel);
         Spinner spinnerEstado = dialogView.findViewById(R.id.spinnerEstado);
@@ -160,6 +165,9 @@ public class FragmentReserva extends Fragment {
         EditText etNotas = dialogView.findViewById(R.id.etNotas);
         EditText etFechaCreacion = dialogView.findViewById(R.id.etFechaCreacion);
         EditText etPago = dialogView.findViewById(R.id.etPago);
+
+        Button btnGuardar = dialogView.findViewById(R.id.btnGuardar);
+        Button btnCancelar = dialogView.findViewById(R.id.btnCancelar);
 
         List<String> clienteNombres = new ArrayList<>();
         List<String> pastelNombres = new ArrayList<>();
@@ -176,42 +184,49 @@ public class FragmentReserva extends Fragment {
         ArrayAdapter<String> adapterEstado = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, estados);
         spinnerEstado.setAdapter(adapterEstado);
 
-        new AlertDialog.Builder(getContext())
-                .setTitle("Agregar Reserva")
-                .setView(dialogView)
-                .setPositiveButton("Guardar", (dialog, which) -> {
-                    int indexCliente = spinnerCliente.getSelectedItemPosition();
-                    int indexPastel = spinnerPastel.getSelectedItemPosition();
+        btnGuardar.setOnClickListener(v -> {
+            int indexCliente = spinnerCliente.getSelectedItemPosition();
+            int indexPastel = spinnerPastel.getSelectedItemPosition();
 
-                    String fecha = etFecha.getText().toString().trim();
-                    String notas = etNotas.getText().toString().trim();
-                    String fechaCreacion = etFechaCreacion.getText().toString().trim();
-                    String estado = spinnerEstado.getSelectedItem().toString();
-                    String pago = etPago.getText().toString().trim();
+            String fecha = etFecha.getText().toString().trim();
+            String notas = etNotas.getText().toString().trim();
+            String fechaCreacion = etFechaCreacion.getText().toString().trim();
+            String estado = spinnerEstado.getSelectedItem().toString();
+            String pago = etPago.getText().toString().trim();
 
-                    String keyCliente = clienteKeys.get(indexCliente);
-                    String keyPastel = pastelKeys.get(indexPastel);
+            if (fecha.isEmpty() || fechaCreacion.isEmpty() || pago.isEmpty()) {
+                Toast.makeText(getContext(), "Fecha, creación y pago son obligatorios", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                    Cliente cliente = mapaClientes.get(keyCliente);
-                    Pasteles pastel = mapaPasteles.get(keyPastel);
+            String keyCliente = clienteKeys.get(indexCliente);
+            String keyPastel = pastelKeys.get(indexPastel);
 
-                    String id = "reserva" + (listaReservas.size() + 1);
-                    String firebaseId = FirebaseDatabase.getInstance().getReference("reservas").push().getKey();
+            Cliente cliente = mapaClientes.get(keyCliente);
+            Pasteles pastel = mapaPasteles.get(keyPastel);
 
-                    //Reserva nueva = new Reserva(id, keyCliente, cliente.getNombre(), keyPastel, pastel.getNombrePastel(),fecha, fechaCreacion, estado, pago, notas);
-                    Reserva nueva = new Reserva(keyCliente, cliente.getNombre(), keyPastel, pastel.getNombrePastel(),fecha, fechaCreacion, estado, pago, notas);
+            String firebaseId = FirebaseDatabase.getInstance().getReference("reservas").push().getKey();
 
-                    FirebaseDatabase.getInstance().getReference("reservas")
-                            .child(firebaseId)
-                            .setValue(nueva)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(getContext(), "Reserva agregada", Toast.LENGTH_SHORT).show();
-                                cargarReservasDesdeFirebase();
-                            });
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
+            Reserva nueva = new Reserva(keyCliente, cliente.getNombre(), keyPastel, pastel.getNombrePastel(),
+                    fecha, fechaCreacion, estado, pago, notas);
+
+            FirebaseDatabase.getInstance().getReference("reservas")
+                    .child(firebaseId)
+                    .setValue(nueva)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getContext(), "Reserva agregada", Toast.LENGTH_SHORT).show();
+                        cargarReservasDesdeFirebase();
+                        dialog.dismiss();
+                    })
+                    .addOnFailureListener(e ->
+                            Toast.makeText(getContext(), "Error al guardar reserva", Toast.LENGTH_SHORT).show());
+        });
+
+        btnCancelar.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
+
 
     private void verificarRolUsuario() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

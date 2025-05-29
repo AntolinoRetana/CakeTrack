@@ -106,9 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             refUsuario.setValue(userData).addOnCompleteListener(dbTask -> {
                                                 if (dbTask.isSuccessful()) {
                                                     Toast.makeText(this, "Verifica tu correo antes de iniciar sesión", Toast.LENGTH_LONG).show();
-                                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                    startActivity(intent);
+                                                    finish();
                                                 } else {
                                                     Toast.makeText(this, "Error al guardar datos del usuario", Toast.LENGTH_SHORT).show();
                                                 }

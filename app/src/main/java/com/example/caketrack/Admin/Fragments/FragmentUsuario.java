@@ -1,5 +1,6 @@
 package com.example.caketrack.Admin.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.example.caketrack.Admin.Usuario.Adapter.UsuarioAdapter;
 import com.example.caketrack.Moduls.Usuario;
 import com.example.caketrack.R;
+import com.example.caketrack.RegisterActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -43,6 +46,7 @@ public class FragmentUsuario extends Fragment {
     private UsuarioAdapter usuarioAdapter;
     private final ArrayList<Usuario> listaUsuarios = new ArrayList<>();
     private final ArrayList<String> listaUIDs = new ArrayList<>();
+    private FloatingActionButton fabAgregar;
 
 
     public FragmentUsuario() {
@@ -85,7 +89,9 @@ public class FragmentUsuario extends Fragment {
         recyclerUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
         usuarioAdapter = new UsuarioAdapter( getContext() , listaUIDs, listaUsuarios);
         recyclerUsuarios.setAdapter(usuarioAdapter);
+        fabAgregar = view.findViewById(R.id.fabAgregarUsuario);
 
+        fabAgregar.setOnClickListener(v -> mostrarAgregarUsuario());
         cargarUsuarios();
 
         return view;
@@ -112,6 +118,10 @@ public class FragmentUsuario extends Fragment {
                         Toast.makeText(getContext(), "Error al cargar usuarios", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+    private void mostrarAgregarUsuario() {
+        Intent intent = new Intent(getContext(), RegisterActivity.class);
+        startActivity(intent);
     }
 
 }

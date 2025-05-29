@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -86,6 +87,7 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
 
         holder.btnEditar.setOnClickListener(v -> {
             View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_agregar_reserva, null);
+
             EditText etFecha = dialogView.findViewById(R.id.etFecha);
             EditText etNotas = dialogView.findViewById(R.id.etNotas);
             Spinner spinnerCliente = dialogView.findViewById(R.id.spinnerCliente);
@@ -93,6 +95,8 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
             Spinner spinnerEstado = dialogView.findViewById(R.id.spinnerEstado);
             EditText etFechaCreacion = dialogView.findViewById(R.id.etFechaCreacion);
             EditText etPago = dialogView.findViewById(R.id.etPago);
+            Button btnGuardar = dialogView.findViewById(R.id.btnGuardar);
+            Button btnCancelar = dialogView.findViewById(R.id.btnCancelar);
 
             etFecha.setText(reserva.getFecha());
             etNotas.setText(reserva.getNotas());
@@ -114,6 +118,10 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
             ArrayAdapter<String> estadoAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, listaEstados);
             estadoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerEstado.setAdapter(estadoAdapter);
+
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setView(dialogView)
+                    .create();
 
             // Paso 1: Cargar clientes
             FirebaseDatabase.getInstance().getReference("clientes").get().addOnSuccessListener(snapshotClientes -> {
@@ -145,71 +153,74 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
                         }
                     }
 
-                    // Paso 3: Cargar estados (mejor usar estado predefinido)
+                    // Paso 3: Cargar estados
                     listaEstados.clear();
-                    listaEstados.add("Pendiente");
-                    listaEstados.add("Confirmada");
-                    listaEstados.add("Entregada");
-                    listaEstados.add("Cancelada");
+                    listaEstados.add("pendiente");
+                    listaEstados.add("confirmada");
+                    listaEstados.add("en_produccion");
+                    listaEstados.add("lista_para_entrega");
+                    listaEstados.add("entregada");
+                    listaEstados.add("cancelada");
                     estadoAdapter.notifyDataSetChanged();
 
                     for (int i = 0; i < listaEstados.size(); i++) {
-                        if (listaEstados.get(i).equals(reserva.getEstado())) {
+                        if (listaEstados.get(i).equalsIgnoreCase(reserva.getEstado())) {
                             spinnerEstado.setSelection(i);
                             break;
                         }
                     }
 
-                    // Mostrar el diálogo SOLO cuando los 3 spinners están listos
-                    new AlertDialog.Builder(context)
-                            .setTitle("Editar reserva")
-                            .setView(dialogView)
-                            .setPositiveButton("Guardar", (dialog, which) -> {
-                                if (spinnerCliente.getSelectedItem() == null ||
-                                        spinnerPastel.getSelectedItem() == null ||
-                                        spinnerEstado.getSelectedItem() == null) {
-                                    Toast.makeText(context, "No se han cargado los datos aún.", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-
-                                String nuevaFecha = etFecha.getText().toString().trim();
-                                String nuevasNotas = etNotas.getText().toString().trim();
-                                String nuevoClienteNombre = spinnerCliente.getSelectedItem().toString();
-                                String nuevoPastelNombre = spinnerPastel.getSelectedItem().toString();
-                                String nuevoEstado = spinnerEstado.getSelectedItem().toString();
-                                String nuevoPago = etPago.getText().toString().trim();
-                                String nuevaFechaCreacion = etFechaCreacion.getText().toString().trim();
-
-                                if (nuevaFecha.isEmpty()) {
-                                    Toast.makeText(context, "La fecha no puede estar vacía", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-
-                                Reserva actualizada = new Reserva(
-                                        reserva.getClienteId(),
-                                        nuevoClienteNombre,
-                                        reserva.getPastelId(),
-                                        nuevoPastelNombre,
-                                        nuevaFecha,
-                                        nuevaFechaCreacion,
-                                        nuevoEstado,
-                                        nuevoPago,
-                                        nuevasNotas);
-
-                                FirebaseDatabase.getInstance().getReference("reservas")
-                                        .child(uid)
-                                        .setValue(actualizada)
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(context, "Reserva actualizada", Toast.LENGTH_SHORT).show();
-                                            listaReservas.set(position, actualizada);
-                                            notifyItemChanged(position);
-                                        });
-                            })
-                            .setNegativeButton("Cancelar", null)
-                            .show();
+                    dialog.show();
                 });
             });
+
+            btnGuardar.setOnClickListener(v1 -> {
+                if (spinnerCliente.getSelectedItem() == null ||
+                        spinnerPastel.getSelectedItem() == null ||
+                        spinnerEstado.getSelectedItem() == null) {
+                    Toast.makeText(context, "No se han cargado los datos aún.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String nuevaFecha = etFecha.getText().toString().trim();
+                String nuevasNotas = etNotas.getText().toString().trim();
+                String nuevoClienteNombre = spinnerCliente.getSelectedItem().toString();
+                String nuevoPastelNombre = spinnerPastel.getSelectedItem().toString();
+                String nuevoEstado = spinnerEstado.getSelectedItem().toString();
+                String nuevoPago = etPago.getText().toString().trim();
+                String nuevaFechaCreacion = etFechaCreacion.getText().toString().trim();
+
+                if (nuevaFecha.isEmpty() || nuevaFechaCreacion.isEmpty() || nuevoPago.isEmpty()) {
+                    Toast.makeText(context, "Fecha, creación y pago son obligatorios", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Reserva actualizada = new Reserva(
+                        reserva.getClienteId(),
+                        nuevoClienteNombre,
+                        reserva.getPastelId(),
+                        nuevoPastelNombre,
+                        nuevaFecha,
+                        nuevaFechaCreacion,
+                        nuevoEstado,
+                        nuevoPago,
+                        nuevasNotas
+                );
+
+                FirebaseDatabase.getInstance().getReference("reservas")
+                        .child(uid)
+                        .setValue(actualizada)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(context, "Reserva actualizada", Toast.LENGTH_SHORT).show();
+                            listaReservas.set(position, actualizada);
+                            notifyItemChanged(position);
+                            dialog.dismiss();
+                        });
+            });
+
+            btnCancelar.setOnClickListener(v1 -> dialog.dismiss());
         });
+
 
 
 

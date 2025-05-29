@@ -94,15 +94,18 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
             EditText etFechaCreacion = dialogView.findViewById(R.id.etFechaCreacion);
             EditText etPago = dialogView.findViewById(R.id.etPago);
 
+            // Setear valores actuales de la reserva en el diálogo
             etFecha.setText(reserva.getFecha());
             etNotas.setText(reserva.getNotas());
             etFechaCreacion.setText(reserva.getFecha_creacion());
             etPago.setText(reserva.getPago());
 
+            // Listas para los spinners
             List<String> listaClientes = new ArrayList<>();
             List<String> listaPasteles = new ArrayList<>();
             List<String> listaEstados = new ArrayList<>();
 
+            // Adaptadores para spinners
             ArrayAdapter<String> clienteAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, listaClientes);
             clienteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerCliente.setAdapter(clienteAdapter);
@@ -115,7 +118,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
             estadoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerEstado.setAdapter(estadoAdapter);
 
-            // Para solo lectura pero con texto visible normal
+            // Bloquear edición en ciertos campos (solo lectura visible)
             etFecha.setFocusable(false);
             etFecha.setClickable(false);
 
@@ -128,12 +131,11 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
             etNotas.setFocusable(false);
             etNotas.setClickable(false);
 
-            // Spinner Cliente y Pastel igual
+            // Bloquear selección en estos spinners
             spinnerCliente.setEnabled(false);
             spinnerPastel.setEnabled(false);
 
-
-            // Paso 1: Cargar clientes
+            // Cargar lista de clientes desde Firebase
             FirebaseDatabase.getInstance().getReference("clientes").get().addOnSuccessListener(snapshotClientes -> {
                 for (DataSnapshot clienteSnapshot : snapshotClientes.getChildren()) {
                     String nombre = clienteSnapshot.child("nombre").getValue(String.class);
@@ -141,6 +143,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
                 }
                 clienteAdapter.notifyDataSetChanged();
 
+                // Seleccionar cliente actual en spinner
                 for (int i = 0; i < listaClientes.size(); i++) {
                     if (listaClientes.get(i).equals(reserva.getClienteNombre())) {
                         spinnerCliente.setSelection(i);
@@ -148,7 +151,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
                     }
                 }
 
-                // Paso 2: Cargar pasteles
+                // Cargar lista de pasteles desde Firebase
                 FirebaseDatabase.getInstance().getReference("pasteles").get().addOnSuccessListener(snapshotPasteles -> {
                     for (DataSnapshot pastelSnapshot : snapshotPasteles.getChildren()) {
                         String nombre = pastelSnapshot.child("nombrePastel").getValue(String.class);
@@ -156,6 +159,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
                     }
                     pastelAdapter.notifyDataSetChanged();
 
+                    // Seleccionar pastel actual en spinner
                     for (int i = 0; i < listaPasteles.size(); i++) {
                         if (listaPasteles.get(i).equals(reserva.getPastelNombre())) {
                             spinnerPastel.setSelection(i);
@@ -163,7 +167,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
                         }
                     }
 
-                    // Paso 3: Cargar estados (mejor usar estado predefinido)
+                    // Estados predefinidos para el spinnerEstado
                     listaEstados.clear();
                     listaEstados.add("Pendiente");
                     listaEstados.add("Confirmada");
@@ -171,6 +175,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
                     listaEstados.add("Cancelada");
                     estadoAdapter.notifyDataSetChanged();
 
+                    // Seleccionar estado actual en spinner
                     for (int i = 0; i < listaEstados.size(); i++) {
                         if (listaEstados.get(i).equals(reserva.getEstado())) {
                             spinnerEstado.setSelection(i);
@@ -178,7 +183,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
                         }
                     }
 
-                    // Mostrar el diálogo SOLO cuando los 3 spinners están listos
+                    // Mostrar el diálogo cuando todo está cargado
                     new AlertDialog.Builder(context)
                             .setTitle("Editar reserva")
                             .setView(dialogView)
@@ -228,6 +233,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
                 });
             });
         });
+
     }
 
     @Override
