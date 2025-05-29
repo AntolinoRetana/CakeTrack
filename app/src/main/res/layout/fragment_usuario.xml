@@ -10,8 +10,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerUsuarios"
-        android:layout_width="383dp"
-        android:layout_height="509dp"
+        android:layout_width="376dp"
+        android:layout_height="516dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
@@ -23,11 +23,6 @@
         android:id="@+id/fabAgregarUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="70dp"
         android:contentDescription="Agregar reserva"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/rosaBotonesEncabezados"
