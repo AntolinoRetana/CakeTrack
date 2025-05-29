@@ -1,88 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_height="match_parent"
+    android:background="@color/fondoPrincipal"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#FFF8E1"
->
+        android:padding="24dp">
 
-        <EditText android:id="@+id/etNombreCliente"
+        <!-- Título del formulario -->
+        <TextView
             android:layout_width="match_parent"
-            android:hint="Nombre completo"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
+            android:layout_height="wrap_content"
+            android:text="Agregar Nuevo Cliente"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
             android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"/>
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
 
-        <EditText
-            android:id="@+id/etTelefonoCliente"
+        <!-- Card contenedor para información personal -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text_redondito"
-            android:hint="Teléfono"
-            android:inputType="phone"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
 
-        <EditText android:id="@+id/etDireccionCliente"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Sección de información personal -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:text="Información Personal"
+                    android:textColor="@color/chocolateClaro"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Nombre completo -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Nombre completo"
+                    app:startIconDrawable="@android:drawable/ic_menu_my_calendar">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNombreCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Teléfono -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Teléfono"
+                    app:startIconDrawable="@android:drawable/stat_sys_phone_call">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTelefonoCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="phone"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Correo electrónico -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Correo electrónico"
+                    app:startIconDrawable="@android:drawable/ic_dialog_email">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCorreoCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card para información de contacto -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:hint="Dirección"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
 
-        <EditText android:id="@+id/etCorreoCliente"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:hint="Correo"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        <EditText android:id="@+id/etNotasCliente"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:hint="Notas adicionales"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"/>
+                <!-- Sección de ubicación -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Información de Ubicación"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:layout_marginBottom="16dp" />
 
+                <!-- Dirección -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Dirección completa"
+                    app:startIconDrawable="@android:drawable/ic_dialog_map">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDireccionCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="textPostalAddress"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Notas adicionales -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Notas adicionales"
+                    app:startIconDrawable="@android:drawable/ic_menu_edit">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNotasCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:maxLines="4"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Botones de acción -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp"
-            android:gravity="end">
+            android:gravity="end"
+            android:layout_marginTop="24dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancelar"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancelar"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/black"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/nunitoprincipal"
-                android:layout_marginEnd="8dp"/>
+                android:text="Cancelar"
+                android:textColor="@color/colorPrimary"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="2dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGuardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Guardar"
                 android:backgroundTint="@color/rosaBotonesEncabezados"
+                android:elevation="4dp"
+                android:fontFamily="@font/nunitoprincipal"
+                android:text="Guardar Cliente"
                 android:textColor="@color/white"
-                android:fontFamily="@font/nunitoprincipal"/>
-        </LinearLayout>
-    </LinearLayout>
+                app:cornerRadius="12dp"
+                app:icon="@android:drawable/ic_menu_save"
+                app:iconGravity="textStart" />
 
+        </LinearLayout>
+
+    </LinearLayout>
 </ScrollView>

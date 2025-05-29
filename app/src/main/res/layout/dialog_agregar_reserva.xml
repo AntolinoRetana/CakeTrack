@@ -1,51 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!-- res/layout/dialog_agregar_reserva.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/fondoPrincipal"
+    android:fillViewport="true">
 
-    <Spinner
-        android:id="@+id/spinnerCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Spinner
-        android:id="@+id/spinnerPastel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/etFecha"
-        android:hint="Fecha (ej: 2025-06-10)"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="date" />
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <EditText
-        android:id="@+id/etFechaCreacion"
-        android:hint="Fecha de creación (ej: 2025-05-27)"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="date" />
+        <!-- Título del diálogo -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nueva Reserva"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/nunitoprincipal"
+            android:gravity="center"
+            android:layout_marginBottom="20dp" />
 
-    <Spinner
-        android:id="@+id/spinnerEstado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <!-- Card para selección de cliente y pastel -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Sección de selección -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:text="Selección de Pedido"
+                    android:textColor="@color/chocolateClaro"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Cliente -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cliente"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="8dp"
+                    android:elevation="2dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/fondoTargetas"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+                </androidx.cardview.widget.CardView>
+
+                <!-- Pastel -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pastel"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="8dp"
+                    android:elevation="2dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerPastel"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/fondoTargetas"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card para fechas -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Sección de fechas -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fechas de la Reserva"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Fecha de entrega -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Fecha de entrega (ej: 2025-06-10)"
+                    app:startIconDrawable="@android:drawable/ic_menu_my_calendar">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etFecha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="date"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Fecha de creación -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Fecha de creación (ej: 2025-05-27)"
+                    app:startIconDrawable="@android:drawable/ic_menu_recent_history">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etFechaCreacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="date"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card para estado y pago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Sección de estado y pago -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estado y Pago"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Estado -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estado de la reserva"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="8dp"
+                    android:elevation="2dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerEstado"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@color/fondoTargetas"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+                </androidx.cardview.widget.CardView>
+
+                <!-- Pago -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Monto del pago ($)"
+                    app:startIconDrawable="@drawable/ic_money">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPago"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Notas -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Notas especiales"
+                    app:startIconDrawable="@android:drawable/ic_menu_edit">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNotas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="textMultiLine"
+                        android:lines="2"
+                        android:maxLines="3"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Botones de acción del diálogo -->
 
 
-    <EditText
-        android:id="@+id/etPago"
-        android:hint="Pago (ej: 100.00)"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal" />
-
-    <EditText
-        android:id="@+id/etNotas"
-        android:hint="Notas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

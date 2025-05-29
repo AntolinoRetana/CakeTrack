@@ -26,9 +26,11 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/rosaBotonesEncabezados"
-        app:itemBackground="@drawable/bottom_nav_item_background"
-        app:itemIconTint="@android:color/white"
-        app:itemTextColor="@android:color/white"
-        app:menu="@menu/menu_navegacion" />
+        android:background="@drawable/bg_header"
+        app:itemBackground="@drawable/bottom_nav_item_background_pasteles"
+        app:itemIconTint="@drawable/bottom_nav_icon_selector"
+        app:itemTextColor="@drawable/bottom_nav_text_selector"
+        app:itemIconSize="28dp"
+        app:labelVisibilityMode="auto"
+        app:menu="@menu/menu_navegacion"/>
 </LinearLayout>

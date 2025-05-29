@@ -29,9 +29,12 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
     private Context context;
     private List<Pasteles> lista;
     private List<String> listaUIDs;
-    private static final int PICK_IMAGE_REQUEST = 101;
-    private Uri imageUriSeleccionada;
-    private ImageView currentImageView;
+    private OnImageSelectionListener imageSelectionListener;
+
+    // Interface para manejar la selección de imágenes
+    public interface OnImageSelectionListener {
+        void onSelectImageForEdit(int position, String uid, Pasteles pastel);
+    }
 
     public PastelesAdapter(Context context, List<Pasteles> lista, List<String> listaUIDs) {
         this.context = context;
@@ -39,7 +42,8 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
         this.listaUIDs = listaUIDs;
     }
 
-    public PastelesAdapter() {
+    public void setImageSelectionListener(OnImageSelectionListener listener) {
+        this.imageSelectionListener = listener;
     }
 
     @NonNull
@@ -83,8 +87,12 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
                     .setPositiveButton("Sí", (dialog, which) -> {
                         // Eliminar imagen de Storage si existe
                         if (pastel.getImageUrl() != null && !pastel.getImageUrl().isEmpty()) {
-                            StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(pastel.getImageUrl());
-                            imageRef.delete(); // Opcional: manejar éxito/error
+                            try {
+                                StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(pastel.getImageUrl());
+                                imageRef.delete(); // Opcional: manejar éxito/error
+                            } catch (Exception e) {
+                                // Continuar con eliminación aunque falle borrar imagen
+                            }
                         }
 
                         FirebaseDatabase.getInstance().getReference("pasteles")
@@ -95,100 +103,24 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
                                     lista.remove(position);
                                     listaUIDs.remove(position);
                                     notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, lista.size());
                                 });
                     })
                     .setNegativeButton("Cancelar", null)
                     .show();
         });
 
-        // Editar
+        // Editar - Delegamos al Fragment
         holder.btnEditar.setOnClickListener(v -> {
-            View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_agregar_pastel, null);
-            EditText etNombre = dialogView.findViewById(R.id.etNombrePastel);
-            EditText etDescripcion = dialogView.findViewById(R.id.etDescripcionPastel);
-            EditText etPrecio = dialogView.findViewById(R.id.etPrecioPastel);
-            EditText etTamano = dialogView.findViewById(R.id.etTamanoPastel);
-            EditText etCantidad = dialogView.findViewById(R.id.etCantidadPastel);
-            EditText etDisponible = dialogView.findViewById(R.id.etDisponiblePastel);
-            ImageView imageViewDialog = dialogView.findViewById(R.id.imageViewPastel);
-            Button btnSeleccionarImagen = dialogView.findViewById(R.id.btnSeleccionarImagen);
-
-            // Rellenar campos
-            etNombre.setText(pastel.getNombrePastel());
-            etDescripcion.setText(pastel.getDescripcion());
-            etPrecio.setText(String.valueOf(pastel.getPrecio()));
-            etTamano.setText(pastel.getTamano());
-            etCantidad.setText(String.valueOf(pastel.getCantidadDisponible()));
-            etDisponible.setText(pastel.isDisponible() ? "1" : "0");
-
-            // Cargar imagen actual
-            if (pastel.getImageUrl() != null && !pastel.getImageUrl().isEmpty()) {
-                Glide.with(context)
-                        .load(pastel.getImageUrl())
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .into(imageViewDialog);
+            if (imageSelectionListener != null) {
+                imageSelectionListener.onSelectImageForEdit(position, uid, pastel);
             }
-
-            // Reset para nueva selección
-            imageUriSeleccionada = null;
-            currentImageView = imageViewDialog;
-
-            btnSeleccionarImagen.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                // Nota: Para manejar onActivityResult en Adapter necesitarías implementar
-                // un sistema de callback hacia el Fragment o Activity
-                // Por simplicidad, este ejemplo muestra la estructura básica
-            });
-
-            new AlertDialog.Builder(context)
-                    .setTitle("Editar pastel")
-                    .setView(dialogView)
-                    .setPositiveButton("Guardar", (dialog, which) -> {
-                        try {
-                            String nombre = etNombre.getText().toString().trim();
-                            String descripcion = etDescripcion.getText().toString().trim();
-                            String precioStr = etPrecio.getText().toString().trim();
-                            String tamano = etTamano.getText().toString().trim();
-                            String disponibleStr = etDisponible.getText().toString().trim();
-                            String cantidadStr = etCantidad.getText().toString().trim();
-
-                            if (nombre.isEmpty() || precioStr.isEmpty() || cantidadStr.isEmpty() || disponibleStr.isEmpty()) {
-                                Toast.makeText(context, "Completa todos los campos obligatorios", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            double precio = Double.parseDouble(precioStr);
-                            int cantidad = Integer.parseInt(cantidadStr);
-                            boolean disponible = disponibleStr.equals("1");
-
-                            // Si hay nueva imagen seleccionada, subirla
-                            if (imageUriSeleccionada != null) {
-                                StorageReference ref = FirebaseStorage.getInstance().getReference("pasteles")
-                                        .child(System.currentTimeMillis() + ".jpg");
-
-                                ref.putFile(imageUriSeleccionada)
-                                        .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
-                                            String nuevaUrl = uri.toString();
-                                            actualizarPastel(uid, position, pastel.getId(), nombre, descripcion, precio, tamano, disponible, cantidad, nuevaUrl);
-                                        }));
-                            } else {
-                                // Mantener la imagen actual
-                                actualizarPastel(uid, position, pastel.getId(), nombre, descripcion, precio, tamano, disponible, cantidad, pastel.getImageUrl());
-                            }
-
-                        } catch (Exception e) {
-                            Toast.makeText(context, "Error al guardar pastel: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
         });
     }
 
-    private void actualizarPastel(String uid, int position, String id, String nombre, String descripcion,
-                                  double precio, String tamano, boolean disponible, int cantidad, String imageUrl) {
+    // Método para actualizar un pastel específico
+    public void actualizarPastel(int position, String uid, String id, String nombre, String descripcion,
+                                 double precio, String tamano, boolean disponible, int cantidad, String imageUrl) {
         Pasteles actualizado = new Pasteles(id, nombre, descripcion, precio, tamano, disponible, cantidad, imageUrl);
 
         FirebaseDatabase.getInstance().getReference("pasteles")
@@ -198,6 +130,9 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
                     Toast.makeText(context, "Pastel actualizado", Toast.LENGTH_SHORT).show();
                     lista.set(position, actualizado);
                     notifyItemChanged(position);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Error al actualizar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -220,7 +155,7 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
             tvDisponible = itemView.findViewById(R.id.tvDisponiblePastel);
             btnEditar = itemView.findViewById(R.id.btnEditarPastel);
             btnEliminar = itemView.findViewById(R.id.btnEliminarPastel);
-            imageViewPastel = itemView.findViewById(R.id.imageViewItemPastel); // Asegúrate de que este ID exista
+            imageViewPastel = itemView.findViewById(R.id.imageViewItemPastel);
         }
     }
 }

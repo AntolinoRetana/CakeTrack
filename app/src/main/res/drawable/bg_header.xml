@@ -3,11 +3,11 @@
     <gradient
         android:type="linear"
         android:angle="135"
-        android:startColor="#F48FB1"
-        android:centerColor="#E57373"
+        android:startColor="@color/colorPrimary"
+        android:centerColor="@color/rosaBotonesEncabezados"
         android:centerX="0.5"
         android:centerY="0.5"
-        android:endColor="#81D4FA"
+        android:endColor="@color/colorAccent"
         android:useLevel="false" />
     <corners android:radius="40dp" />
     <padding android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp"/>

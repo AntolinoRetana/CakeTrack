@@ -1,105 +1,304 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="20dp"
-    android:background="@color/fondoTargetas">
+    android:layout_height="match_parent"
+    android:background="@color/fondoPrincipal"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <!-- Nombre -->
-        <EditText
-            android:id="@+id/etNombrePastel"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"
-            android:hint="Nombre del pastel"
-            android:inputType="textPersonName" />
-
-        <!-- Descripción -->
-        <EditText
-            android:id="@+id/etDescripcionPastel"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"
-            android:hint="Descripción"
-            android:layout_marginTop="8dp"
-            android:inputType="textMultiLine" />
-
-        <!-- Precio -->
-        <EditText
-            android:id="@+id/etPrecioPastel"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"
-            android:hint="Precio"
-            android:layout_marginTop="8dp"
-            android:inputType="numberDecimal" />
-
-        <!-- Tamaño -->
-        <EditText
-            android:id="@+id/etTamanoPastel"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"
-            android:hint="Tamaño (ej: Mediano)"
-            android:layout_marginTop="8dp"
-            android:inputType="text" />
-
-        <!-- Cantidad disponible -->
-        <EditText
-            android:id="@+id/etCantidadPastel"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"
-            android:hint="Cantidad disponible"
-            android:layout_marginTop="8dp"
-            android:inputType="number" />
-
-        <!-- Disponible -->
-        <EditText
-            android:id="@+id/etDisponiblePastel"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_text_redondito"
-            android:fontFamily="@font/nunitoprincipal"
-            android:paddingLeft="15dp"
-            android:hint="Disponible (1 = sí, 0 = no)"
-            android:layout_marginTop="8dp"
-            android:inputType="number" />
-
-        <ImageView
-            android:id="@+id/imageViewPastel"
-            android:layout_width="match_parent"
-            android:layout_height="132dp"
-            android:layout_marginTop="10dp"
-            android:background="#CCCCCC"
-            android:contentDescription="Imagen del pastel"
-            android:scaleType="centerCrop" />
-
-        <Button
-            android:id="@+id/btnSeleccionarImagen"
+        <!-- Título del formulario -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/rosaBotonesEncabezados"
+            android:text="Agregar Nuevo Pastel"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
             android:fontFamily="@font/nunitoprincipal"
-            android:text="Seleccionar imagen desde galería"
-            android:layout_marginTop="8dp" />
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Card contenedor para los campos -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Sección de información básica -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:text="Información Básica"
+                    android:textColor="@color/chocolateClaro"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Nombre del pastel -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Nombre del pastel">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNombrePastel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Descripción -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Descripción del pastel">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDescripcionPastel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:maxLines="4"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Tamaño -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Tamaño">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTamanoPastel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="text"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card para información comercial -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Sección comercial -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Información Comercial"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Precio -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Precio ($)"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:startIconDrawable="@drawable/ic_money">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPrecioPastel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Cantidad disponible -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Cantidad disponible"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCantidadPastel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="number"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Campo de disponibilidad con EditText -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Disponibilidad (1 = Sí, 0 = No)">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDisponiblePastel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:inputType="number"
+                        android:textColor="@color/chocolateClaro"
+                        android:textColorHint="@color/hintColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card para imagen -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@color/fondoTargetas"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Título de imagen -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Imagen del Pastel"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/chocolateClaro"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Contenedor de imagen con FrameLayout para superponer elementos -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    android:elevation="2dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <!-- ImageView para la imagen seleccionada -->
+                        <ImageView
+                            android:id="@+id/imageViewPastel"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/cremaPastel"
+                            android:contentDescription="Imagen del pastel"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone" />
+
+                        <!-- Placeholder que se oculta cuando hay imagen -->
+                        <LinearLayout
+                            android:id="@+id/layoutPlaceholder"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:background="@color/cremaPastel"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:src="@android:drawable/ic_menu_camera"
+                                android:tint="@color/hintColor"
+                                android:layout_marginBottom="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Toca para agregar imagen"
+                                android:textColor="@color/hintColor"
+                                android:fontFamily="@font/nunitoprincipal"
+                                android:textSize="16sp"
+                                android:gravity="center" />
+                        </LinearLayout>
+
+                    </FrameLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Botón para seleccionar imagen -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSeleccionarImagen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Seleccionar desde galería"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:backgroundTint="@color/botonSecundario"
+                    android:textColor="@color/white"
+                    app:cornerRadius="12dp"
+                    android:elevation="4dp"
+                    app:icon="@android:drawable/ic_menu_gallery"
+                    app:iconGravity="textStart" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Botones de acción -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
 
 
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

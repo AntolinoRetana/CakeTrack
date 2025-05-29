@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.caketrack.Admin.Pasteles.Adapter.PastelesAdapter;
 import com.example.caketrack.Admin.Pasteles.Moduls.Pasteles;
 import com.example.caketrack.R;
@@ -31,16 +33,25 @@ import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FragmentPastel extends Fragment {
+public class FragmentPastel extends Fragment implements PastelesAdapter.OnImageSelectionListener {
 
     private RecyclerView recyclerPasteles;
     private PastelesAdapter pastelAdapter;
     private ArrayList<Pasteles> listaPasteles = new ArrayList<>();
     private ArrayList<String> listaUIDs = new ArrayList<>();
     private FloatingActionButton fabAgregar;
-    private static final int PICK_IMAGE_REQUEST = 100;
+
+    // Para manejar selección de imágenes
+    private static final int PICK_IMAGE_REQUEST_ADD = 100;
+    private static final int PICK_IMAGE_REQUEST_EDIT = 101;
     private Uri imageUriSeleccionada;
     private ImageView imageViewPreview;
+    private LinearLayout layoutPlaceholder; // Agregado para controlar el placeholder
+
+    // Para manejar edición
+    private int posicionEditando = -1;
+    private String uidEditando = "";
+    private Pasteles pastelEditando = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +62,7 @@ public class FragmentPastel extends Fragment {
 
         recyclerPasteles.setLayoutManager(new LinearLayoutManager(getContext()));
         pastelAdapter = new PastelesAdapter(getContext(), listaPasteles, listaUIDs);
+        pastelAdapter.setImageSelectionListener(this); // Configurar listener
         recyclerPasteles.setAdapter(pastelAdapter);
 
         cargarPastelesDesdeFirebase();
@@ -58,6 +70,15 @@ public class FragmentPastel extends Fragment {
         fabAgregar.setOnClickListener(v -> mostrarDialogoAgregarPastel());
 
         return view;
+    }
+
+    // Implementación del callback para edición
+    @Override
+    public void onSelectImageForEdit(int position, String uid, Pasteles pastel) {
+        posicionEditando = position;
+        uidEditando = uid;
+        pastelEditando = pastel;
+        mostrarDialogoEditarPastel();
     }
 
     private void cargarPastelesDesdeFirebase() {
@@ -74,6 +95,9 @@ public class FragmentPastel extends Fragment {
                         }
                     }
                     pastelAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error al cargar pasteles: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -87,23 +111,23 @@ public class FragmentPastel extends Fragment {
         EditText etCantidad = dialogView.findViewById(R.id.etCantidadPastel);
         EditText etDisponible = dialogView.findViewById(R.id.etDisponiblePastel);
 
-        // CORREGIDO: Inicializar las vistas de imagen
         imageViewPreview = dialogView.findViewById(R.id.imageViewPastel);
+        layoutPlaceholder = dialogView.findViewById(R.id.layoutPlaceholder);
         Button btnSeleccionarImagen = dialogView.findViewById(R.id.btnSeleccionarImagen);
 
-        // CORREGIDO: Resetear la imagen seleccionada para cada nuevo diálogo
+        // Configurar estado inicial - mostrar placeholder, ocultar imagen
+        mostrarPlaceholder();
         imageUriSeleccionada = null;
-        imageViewPreview.setImageResource(R.drawable.ic_launcher_background); // Imagen por defecto
 
-        // CORREGIDO: Configurar el click listener del botón
-        btnSeleccionarImagen.setOnClickListener(v -> abrirGaleria());
+        // Configurar click en el placeholder para abrir galería
+        layoutPlaceholder.setOnClickListener(v -> abrirGaleriaParaAgregar());
+        btnSeleccionarImagen.setOnClickListener(v -> abrirGaleriaParaAgregar());
 
         new AlertDialog.Builder(getContext())
                 .setTitle("Agregar Pastel")
                 .setView(dialogView)
                 .setPositiveButton("Guardar", (dialog, which) -> {
                     try {
-                        // CORREGIDO: Validar campos antes de parsear
                         String nombre = etNombre.getText().toString().trim();
                         String descripcion = etDescripcion.getText().toString().trim();
                         String precioStr = etPrecio.getText().toString().trim();
@@ -121,22 +145,8 @@ public class FragmentPastel extends Fragment {
                         boolean disponible = disponibleStr.equals("1");
 
                         if (imageUriSeleccionada != null) {
-                            // Subir imagen y guardar pastel
-                            StorageReference ref = FirebaseStorage.getInstance().getReference("pasteles")
-                                    .child(System.currentTimeMillis() + ".jpg");
-
-                            ref.putFile(imageUriSeleccionada)
-                                    .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
-                                        String url = uri.toString();
-                                        guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, url);
-                                    }))
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(getContext(), "Error al subir imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        // Guardar sin imagen si falla la subida
-                                        guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, "");
-                                    });
+                            subirImagenYGuardar(nombre, descripcion, precio, tamano, disponible, cantidad, imageUriSeleccionada, false);
                         } else {
-                            // Guardar sin imagen
                             guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, "");
                         }
                     } catch (NumberFormatException e) {
@@ -149,21 +159,182 @@ public class FragmentPastel extends Fragment {
                 .show();
     }
 
-    private void abrirGaleria() {
+    private void mostrarDialogoEditarPastel() {
+        if (pastelEditando == null) return;
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_agregar_pastel, null);
+
+        EditText etNombre = dialogView.findViewById(R.id.etNombrePastel);
+        EditText etDescripcion = dialogView.findViewById(R.id.etDescripcionPastel);
+        EditText etPrecio = dialogView.findViewById(R.id.etPrecioPastel);
+        EditText etTamano = dialogView.findViewById(R.id.etTamanoPastel);
+        EditText etCantidad = dialogView.findViewById(R.id.etCantidadPastel);
+        EditText etDisponible = dialogView.findViewById(R.id.etDisponiblePastel);
+
+        imageViewPreview = dialogView.findViewById(R.id.imageViewPastel);
+        layoutPlaceholder = dialogView.findViewById(R.id.layoutPlaceholder);
+        Button btnSeleccionarImagen = dialogView.findViewById(R.id.btnSeleccionarImagen);
+
+        // Rellenar campos con datos existentes
+        etNombre.setText(pastelEditando.getNombrePastel());
+        etDescripcion.setText(pastelEditando.getDescripcion());
+        etPrecio.setText(String.valueOf(pastelEditando.getPrecio()));
+        etTamano.setText(pastelEditando.getTamano());
+        etCantidad.setText(String.valueOf(pastelEditando.getCantidadDisponible()));
+        etDisponible.setText(pastelEditando.isDisponible() ? "1" : "0");
+
+        // Manejar imagen existente
+        imageUriSeleccionada = null; // Reset para nueva selección
+        if (pastelEditando.getImageUrl() != null && !pastelEditando.getImageUrl().isEmpty()) {
+            mostrarImagenExistente(pastelEditando.getImageUrl());
+        } else {
+            mostrarPlaceholder();
+        }
+
+        // Configurar listeners
+        layoutPlaceholder.setOnClickListener(v -> abrirGaleriaParaEditar());
+        btnSeleccionarImagen.setOnClickListener(v -> abrirGaleriaParaEditar());
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Editar Pastel")
+                .setView(dialogView)
+                .setPositiveButton("Guardar", (dialog, which) -> {
+                    try {
+                        String nombre = etNombre.getText().toString().trim();
+                        String descripcion = etDescripcion.getText().toString().trim();
+                        String precioStr = etPrecio.getText().toString().trim();
+                        String tamano = etTamano.getText().toString().trim();
+                        String cantidadStr = etCantidad.getText().toString().trim();
+                        String disponibleStr = etDisponible.getText().toString().trim();
+
+                        if (nombre.isEmpty() || precioStr.isEmpty() || cantidadStr.isEmpty() || disponibleStr.isEmpty()) {
+                            Toast.makeText(getContext(), "Completa todos los campos obligatorios", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        double precio = Double.parseDouble(precioStr);
+                        int cantidad = Integer.parseInt(cantidadStr);
+                        boolean disponible = disponibleStr.equals("1");
+
+                        if (imageUriSeleccionada != null) {
+                            // Nueva imagen seleccionada, subirla
+                            subirImagenYActualizar(nombre, descripcion, precio, tamano, disponible, cantidad, imageUriSeleccionada);
+                        } else {
+                            // Mantener imagen actual
+                            pastelAdapter.actualizarPastel(posicionEditando, uidEditando, pastelEditando.getId(),
+                                    nombre, descripcion, precio, tamano, disponible, cantidad, pastelEditando.getImageUrl());
+                        }
+
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "Error al actualizar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    /**
+     * Muestra el placeholder y oculta la imagen
+     */
+    private void mostrarPlaceholder() {
+        if (layoutPlaceholder != null && imageViewPreview != null) {
+            layoutPlaceholder.setVisibility(View.VISIBLE);
+            imageViewPreview.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Muestra la imagen seleccionada y oculta el placeholder
+     */
+    private void mostrarImagenSeleccionada(Uri imageUri) {
+        if (layoutPlaceholder != null && imageViewPreview != null) {
+            layoutPlaceholder.setVisibility(View.GONE);
+            imageViewPreview.setVisibility(View.VISIBLE);
+
+            // Cargar la imagen usando Glide para mejor rendimiento
+            Glide.with(this)
+                    .load(imageUri)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(imageViewPreview);
+        }
+    }
+
+    /**
+     * Muestra una imagen existente desde URL y oculta el placeholder
+     */
+    private void mostrarImagenExistente(String imageUrl) {
+        if (layoutPlaceholder != null && imageViewPreview != null) {
+            layoutPlaceholder.setVisibility(View.GONE);
+            imageViewPreview.setVisibility(View.VISIBLE);
+
+            // Cargar imagen desde URL usando Glide
+            Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(imageViewPreview);
+        }
+    }
+
+    private void abrirGaleriaParaAgregar() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST_ADD);
+    }
+
+    private void abrirGaleriaParaEditar() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST_EDIT);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUriSeleccionada = data.getData();
-            if (imageViewPreview != null) {
-                imageViewPreview.setImageURI(imageUriSeleccionada);
-            }
+
+            // Mostrar la imagen seleccionada inmediatamente
+            mostrarImagenSeleccionada(imageUriSeleccionada);
         }
+    }
+
+    private void subirImagenYGuardar(String nombre, String descripcion, double precio, String tamano,
+                                     boolean disponible, int cantidad, Uri imageUri, boolean esEdicion) {
+        // Mostrar progreso (opcional)
+        Toast.makeText(getContext(), "Subiendo imagen...", Toast.LENGTH_SHORT).show();
+
+        StorageReference ref = FirebaseStorage.getInstance().getReference("pasteles")
+                .child(System.currentTimeMillis() + ".jpg");
+
+        ref.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String url = uri.toString();
+                    if (esEdicion) {
+                        pastelAdapter.actualizarPastel(posicionEditando, uidEditando, pastelEditando.getId(),
+                                nombre, descripcion, precio, tamano, disponible, cantidad, url);
+                    } else {
+                        guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, url);
+                    }
+                }))
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error al subir imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (esEdicion) {
+                        pastelAdapter.actualizarPastel(posicionEditando, uidEditando, pastelEditando.getId(),
+                                nombre, descripcion, precio, tamano, disponible, cantidad, pastelEditando.getImageUrl());
+                    } else {
+                        guardarPastel(nombre, descripcion, precio, tamano, disponible, cantidad, "");
+                    }
+                });
+    }
+
+    private void subirImagenYActualizar(String nombre, String descripcion, double precio, String tamano,
+                                        boolean disponible, int cantidad, Uri imageUri) {
+        subirImagenYGuardar(nombre, descripcion, precio, tamano, disponible, cantidad, imageUri, true);
     }
 
     private void guardarPastel(String nombre, String descripcion, double precio, String tamano, boolean disponible, int cantidad, String imageUrl) {
@@ -174,9 +345,7 @@ public class FragmentPastel extends Fragment {
                     String pastelId = "pastel" + (count + 1);
                     String firebaseId = FirebaseDatabase.getInstance().getReference("pasteles").push().getKey();
 
-                    // CORREGIDO: Usar el constructor correcto y establecer la URL de imagen
-                    Pasteles nuevo = new Pasteles(pastelId, nombre, descripcion, precio, tamano, disponible, cantidad);
-                    nuevo.setImageUrl(imageUrl); // Establecer la URL de imagen
+                    Pasteles nuevo = new Pasteles(pastelId, nombre, descripcion, precio, tamano, disponible, cantidad, imageUrl);
 
                     if (firebaseId != null) {
                         FirebaseDatabase.getInstance().getReference("pasteles")

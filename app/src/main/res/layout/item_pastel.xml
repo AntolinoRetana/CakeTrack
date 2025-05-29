@@ -3,111 +3,226 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="12dp"
+    android:background="@color/fondoTargetas"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
+        android:orientation="vertical"
+        android:background="@color/fondoTargetas">
 
-        <!-- Imagen del pastel -->
-        <ImageView
-            android:id="@+id/imageViewItemPastel"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="12dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/edit_text_redondito"
-            android:src="@drawable/ic_launcher_background" />
-
-        <!-- Información del pastel -->
+        <!-- Contenedor principal horizontal -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tvNombrePastel"
-                android:layout_width="match_parent"
+            <!-- Contenedor de imagen con sombra -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre del Pastel"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/nunitoprincipal" />
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp">
 
-            <TextView
-                android:id="@+id/tvDescripcionPastel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Descripción del pastel"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/nunitoprincipal" />
+                <ImageView
+                    android:id="@+id/imageViewItemPastel"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher_background" />
 
-            <TextView
-                android:id="@+id/tvPrecioPastel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Precio: $0.00"
-                android:textSize="14sp"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/nunitoprincipal" />
+            </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tvTamanoPastel"
-                android:layout_width="match_parent"
+            <!-- Información del pastel -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Tamaño: Mediano"
-                android:textSize="14sp"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/nunitoprincipal" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvCantidadPastel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cantidad: 0"
-                android:textSize="14sp"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/nunitoprincipal" />
+                <TextView
+                    android:id="@+id/tvNombrePastel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:text="Pastel de Chocolate"
+                    android:textColor="@color/chocolateClaro"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
-            <TextView
-                android:id="@+id/tvDisponiblePastel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Disponible"
-                android:textSize="14sp"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/nunitoprincipal" />
+                <TextView
+                    android:id="@+id/tvDescripcionPastel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:text="Delicioso pastel con cobertura de chocolate"
+                    android:textColor="@color/textoSecundario"
+                    android:textSize="14sp"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+
+                <!-- Contenedor de precio y disponibilidad -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvPrecioPastel"
+                        android:layout_width="295dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunitoprincipal"
+                        android:text="$25.00"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- Indicador de disponibilidad -->
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvDisponiblePastel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:text="Disponible"
+                    android:textColor="@color/exito"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Botones de acción verticales -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_marginStart="8dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="2dp"
+                    android:background="@color/botonSuave">
+
+                    <ImageView
+                        android:id="@+id/btnEditarPastel"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Editar pastel"
+                        android:padding="8dp"
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:tint="@color/colorPrimary" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="2dp">
+
+                    <ImageView
+                        android:id="@+id/btnEliminarPastel"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Eliminar pastel"
+                        android:padding="8dp"
+                        android:src="@android:drawable/ic_menu_delete"
+                        android:tint="@color/error" />
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Botones de acción -->
+        <!-- Sección inferior con detalles adicionales -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/rosaPastel"
+            android:layout_marginHorizontal="16dp" />
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:paddingTop="12dp">
 
-            <ImageView
-                android:id="@+id/btnEditarPastel"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@android:drawable/ic_menu_edit"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Editar pastel"
-                android:layout_marginBottom="8dp" />
+            <!-- Tamaño -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/btnEliminarPastel"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@android:drawable/ic_menu_delete"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Eliminar pastel" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📏"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:id="@+id/tvTamanoPastel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:text="Mediano"
+                    android:textColor="@color/textoSecundario"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <!-- Cantidad -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📦"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:id="@+id/tvCantidadPastel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitoprincipal"
+                    android:text="5 unidades"
+                    android:textColor="@color/textoSecundario"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
