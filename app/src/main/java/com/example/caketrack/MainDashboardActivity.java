@@ -36,7 +36,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottomNavigation);
 
         // Fragmento inicial
-        loadFragment(new FragmentHome());
+        loadFragment(new FragmentUsuario());
 
         // Navegación entre fragmentos
         bottomNavigation.setOnItemSelectedListener(item -> {
@@ -72,6 +72,11 @@ public class MainDashboardActivity extends AppCompatActivity {
                     case R.id.nav_pasteles_listas:
                         fragment = new FragmentReservasListas();
                         break;
+                        case R.id.nav_regresar:
+                            bottomNavigation.getMenu().clear();
+                            bottomNavigation.inflateMenu(R.menu.menu_navegacion);
+                            enReservas = false;
+                            break;
                 }
             }
             if (fragment != null) {
