@@ -10,9 +10,6 @@
     android:padding="16dp">
 
     <!-- Contenedor de fragmentos con estilo moderno -->
-
-    <!-- Menú inferior -->
-
     <FrameLayout
         android:id="@+id/fragmentContainerSeller"
         android:layout_width="match_parent"
@@ -22,13 +19,16 @@
         android:background="@drawable/rounded_container"
         android:elevation="6dp" />
 
+    <!-- Menú inferior -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/rosaBotonesEncabezados"
-        app:itemBackground="@drawable/bottom_nav_item_background"
-        app:itemIconTint="@android:color/white"
-        app:itemTextColor="@android:color/white"
+        android:background="@drawable/bg_header"
+        app:itemBackground="@drawable/bottom_nav_item_background_pasteles"
+        app:itemIconTint="@drawable/bottom_nav_icon_selector"
+        app:itemTextColor="@drawable/bottom_nav_text_selector"
+        app:itemIconSize="28dp"
+        app:labelVisibilityMode="auto"
         app:menu="@menu/menu_navegacion_seller" />
 </LinearLayout>
