@@ -21,10 +21,14 @@
         android:id="@+id/fabAgregarReservaConfirmada"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="18dp"
+        android:backgroundTint="#672194"
         android:contentDescription="Agregar reserva"
-        android:src="@android:drawable/ic_input_add"
-        android:backgroundTint="#672194" />
+        android:src="@android:drawable/ic_input_add" />
 </RelativeLayout>
