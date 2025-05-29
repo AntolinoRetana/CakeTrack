@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_pasteles_seller"
+        android:title="Pasteles"
+        android:fontFamily="@font/nunitoprincipal"
+        android:icon="@drawable/cake" />
+    <item
+        android:id="@+id/nav_clientes_seller"
+        android:title="Clientes"
+        android:fontFamily="@font/nunitoprincipal"
+        android:icon="@drawable/clientes" />
+    <item
+        android:id="@+id/nav_reservas_seller"
+        android:title="Reservas"
+        android:fontFamily="@font/nunitoprincipal"
+        android:icon="@drawable/reservacion" />
+
+</menu>

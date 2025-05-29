@@ -3,6 +3,7 @@ package com.example.caketrack.Admin.Fragments;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,8 +19,12 @@ import com.example.caketrack.Admin.Clientes.Adapter.ClienteAdapter;
 import com.example.caketrack.Admin.Clientes.moduls.Cliente;
 import com.example.caketrack.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -95,6 +100,7 @@ public class FragmentCliente extends Fragment {
         cargarClientesDesdeFirebase();
 
         fabAgregar.setOnClickListener(v -> mostrarDialogoAgregarCliente());
+        verificarRolUsuario();
 
         return view;
     }
@@ -172,5 +178,30 @@ public class FragmentCliente extends Fragment {
 
         dialog.show();
     }
+    private void verificarRolUsuario() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(uid).child("role");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String rol = snapshot.getValue(String.class);
+                if ("admin".equals(rol)) {
+                    // Mostrar botón agregar
+                    clienteAdapter.setEsAdmin(true);
+                } else {
+                    // Ocultar botón agregar
+                    clienteAdapter.setEsAdmin(false);
+                }
+                clienteAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "No se pudo verificar el rol del usuario", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }

@@ -30,10 +30,14 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
     private List<Pasteles> lista;
     private List<String> listaUIDs;
     private OnImageSelectionListener imageSelectionListener;
+    private boolean esAdmin;
 
     // Interface para manejar la selección de imágenes
     public interface OnImageSelectionListener {
         void onSelectImageForEdit(int position, String uid, Pasteles pastel);
+    }
+    public void setEsAdmin(boolean esAdmin) {
+        this.esAdmin = esAdmin;
     }
 
     public PastelesAdapter(Context context, List<Pasteles> lista, List<String> listaUIDs) {
@@ -65,6 +69,14 @@ public class PastelesAdapter extends RecyclerView.Adapter<PastelesAdapter.Pastel
         holder.tvCantidad.setText("Cantidad disponible: " + pastel.getCantidadDisponible());
         holder.tvDisponible.setText(pastel.isDisponible() ? "Disponible" : "No disponible");
         holder.tvDisponible.setTextColor(pastel.isDisponible() ? 0xFF4CAF50 : 0xFFF44336);
+
+        if (!esAdmin) {
+            holder.btnEditar.setVisibility(View.GONE);
+            holder.btnEliminar.setVisibility(View.GONE);
+        } else {
+            holder.btnEditar.setVisibility(View.VISIBLE);
+            holder.btnEliminar.setVisibility(View.VISIBLE);
+        }
 
         // Cargar imagen si existe
         if (holder.imageViewPastel != null) {

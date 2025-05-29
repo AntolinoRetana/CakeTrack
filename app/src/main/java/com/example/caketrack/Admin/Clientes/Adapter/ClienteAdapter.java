@@ -24,11 +24,15 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteV
     private List<Cliente> listaClientes;
     public Context context;
     private List<String> listaUIDs;
+    private boolean esAdmin;
     public ClienteAdapter(List<Cliente> listaClientes, Context context) {
         this.listaClientes = listaClientes;
         this.context = context;
     }
 
+    public void setEsAdmin(boolean esAdmin) {
+        this.esAdmin = esAdmin;
+    }
     public ClienteAdapter(Context context, List<Cliente> listaClientes, List<String> listaUIDs) {
         this.context = context;
         this.listaClientes = listaClientes;
@@ -51,7 +55,15 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteV
         holder.tvTelefonoCliente.setText("Teléfono: " + cliente.getTelefono());
         holder.tvDireccionCliente.setText("Dirección: " + cliente.getDireccion());
         holder.tvCorreoCliente.setText("Correo: " + cliente.getCorreo());
-        holder.tvNotasCliente.setText("Notas: " + cliente.getNotas());
+
+
+        if (!esAdmin) {
+            holder.btnEditar.setVisibility(View.GONE);
+            holder.btnEliminar.setVisibility(View.GONE);
+        } else {
+            holder.btnEditar.setVisibility(View.VISIBLE);
+            holder.btnEliminar.setVisibility(View.VISIBLE);
+        }
 
         // Eliminar
         holder.btnEliminar.setOnClickListener(v -> {

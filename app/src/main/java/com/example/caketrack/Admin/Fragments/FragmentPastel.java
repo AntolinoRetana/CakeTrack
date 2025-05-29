@@ -24,8 +24,12 @@ import com.example.caketrack.Admin.Pasteles.Adapter.PastelesAdapter;
 import com.example.caketrack.Admin.Pasteles.Moduls.Pasteles;
 import com.example.caketrack.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -68,6 +72,7 @@ public class FragmentPastel extends Fragment implements PastelesAdapter.OnImageS
         cargarPastelesDesdeFirebase();
 
         fabAgregar.setOnClickListener(v -> mostrarDialogoAgregarPastel());
+        verificarRolUsuario();
 
         return view;
     }
@@ -363,5 +368,31 @@ public class FragmentPastel extends Fragment implements PastelesAdapter.OnImageS
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Error al obtener datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+    private void verificarRolUsuario() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(uid).child("role");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String rol = snapshot.getValue(String.class);
+                if ("admin".equals(rol)) {
+                    // Mostrar botón agregar
+                    fabAgregar.setVisibility(View.VISIBLE);
+                    pastelAdapter.setEsAdmin(true);
+                } else {
+                    // Ocultar botón agregar
+                    fabAgregar.setVisibility(View.GONE);
+                    pastelAdapter.setEsAdmin(false);
+                }
+                pastelAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "No se pudo verificar el rol del usuario", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -1,5 +1,6 @@
 package com.example.caketrack.Admin.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
@@ -18,7 +19,8 @@ import android.widget.Toast;
 
 import com.example.caketrack.Admin.Clientes.moduls.Cliente;
 import com.example.caketrack.Admin.Pasteles.Moduls.Pasteles;
-import com.example.caketrack.Admin.Reservas.Adapter.ReservaAdapter;
+import com.example.caketrack.Admin.Reservas.Adapter.ConfirmadaAdapter;
+import com.example.caketrack.Admin.Reservas.Adapter.PendientesAdapter;
 import com.example.caketrack.Admin.Reservas.Moduls.Reserva;
 import com.example.caketrack.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,10 +38,10 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentReserva#newInstance} factory method to
+ * Use the {@link FragmentReservasListas#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentReserva extends Fragment {
+public class FragmentReservasListas extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,13 +54,13 @@ public class FragmentReserva extends Fragment {
     private RecyclerView recyclerReservas;
     private FloatingActionButton fabAgregar;
     private ArrayList<Reserva> listaReservas = new ArrayList<>();
-    private ReservaAdapter reservaAdapter;
+    private ConfirmadaAdapter reservaAdapter;
     private ArrayList<String> listaUIDs = new ArrayList<>();
 
     private Map<String, Cliente> mapaClientes = new HashMap<>();
     private Map<String, Pasteles> mapaPasteles = new HashMap<>();
 
-    public FragmentReserva() {
+    public FragmentReservasListas() {
         // Required empty public constructor
     }
 
@@ -68,11 +70,11 @@ public class FragmentReserva extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentReserva.
+     * @return A new instance of fragment FragmentReservasListas.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentReserva newInstance(String param1, String param2) {
-        FragmentReserva fragment = new FragmentReserva();
+    public static FragmentReservasListas newInstance(String param1, String param2) {
+        FragmentReservasListas fragment = new FragmentReservasListas();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -89,16 +91,17 @@ public class FragmentReserva extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_reserva, container, false);
-        recyclerReservas = view.findViewById(R.id.recyclerReservas);
-        fabAgregar = view.findViewById(R.id.fabAgregarReserva);
+        View view = inflater.inflate(R.layout.fragment_reservas_listas, container, false);
+        recyclerReservas = view.findViewById(R.id.recyclerReservasConfirmada);
+        fabAgregar = view.findViewById(R.id.fabAgregarReservaConfirmada);
 
         recyclerReservas.setLayoutManager(new LinearLayoutManager(getContext()));
-        reservaAdapter = new ReservaAdapter(getContext(), listaReservas, listaUIDs);
+        reservaAdapter = new ConfirmadaAdapter(getContext(), listaReservas, listaUIDs);
         recyclerReservas.setAdapter(reservaAdapter);
 
         cargarClientesYPasteles();
@@ -142,11 +145,14 @@ public class FragmentReserva extends Fragment {
                     listaUIDs.clear();
                     for (DataSnapshot snap : snapshot.getChildren()) {
                         Reserva r = snap.getValue(Reserva.class);
-                        if (r != null) {
+                        if (r != null && !"pendiente".equalsIgnoreCase(r.getEstado())) {
                             listaReservas.add(r);
                             listaUIDs.add(snap.getKey());
                         }
+
+
                     }
+
                     reservaAdapter.notifyDataSetChanged();
                 });
     }
@@ -237,5 +243,4 @@ public class FragmentReserva extends Fragment {
             }
         });
     }
-
 }

@@ -23,14 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaViewHolder> {
+public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.PendienteViewHolder> {
     private List<Reserva> listaReservas;
     private Context context;
     private List<String> listaUIDs;
     private boolean esAdmin;
-
-
-    public ReservaAdapter(Context context, List<Reserva> listaReservas, List<String> listaUIDs) {
+    public PendientesAdapter(Context context, List<Reserva> listaReservas, List<String> listaUIDs) {
         this.context = context;
         this.listaReservas = listaReservas;
         this.listaUIDs = listaUIDs;
@@ -39,14 +37,15 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
         this.esAdmin = esAdmin;
     }
 
+
     @NonNull
     @Override
-    public ReservaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PendientesAdapter.PendienteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_reserva, parent, false);
-        return new ReservaViewHolder(view);    }
+        return new PendienteViewHolder(view);    }
 
     @Override
-    public void onBindViewHolder(@NonNull ReservaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PendientesAdapter.PendienteViewHolder holder, int position) {
         Reserva reserva = listaReservas.get(position);
         String uid = listaUIDs.get(position);
 
@@ -59,12 +58,13 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
         holder.tvFechaCreacion.setText("Fecha de Creación: " + reserva.getFecha_creacion());
 
         if (!esAdmin) {
-            holder.btnEditar.setVisibility(View.GONE);
+            holder.btnEditar.setVisibility(View.VISIBLE);
             holder.btnEliminar.setVisibility(View.GONE);
         } else {
             holder.btnEditar.setVisibility(View.VISIBLE);
             holder.btnEliminar.setVisibility(View.VISIBLE);
         }
+
 
         holder.btnEliminar.setOnClickListener(v -> {
             new AlertDialog.Builder(context)
@@ -114,6 +114,24 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
             ArrayAdapter<String> estadoAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, listaEstados);
             estadoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerEstado.setAdapter(estadoAdapter);
+
+            // Para solo lectura pero con texto visible normal
+            etFecha.setFocusable(false);
+            etFecha.setClickable(false);
+
+            etFechaCreacion.setFocusable(false);
+            etFechaCreacion.setClickable(false);
+
+            etPago.setFocusable(false);
+            etPago.setClickable(false);
+
+            etNotas.setFocusable(false);
+            etNotas.setClickable(false);
+
+            // Spinner Cliente y Pastel igual
+            spinnerCliente.setEnabled(false);
+            spinnerPastel.setEnabled(false);
+
 
             // Paso 1: Cargar clientes
             FirebaseDatabase.getInstance().getReference("clientes").get().addOnSuccessListener(snapshotClientes -> {
@@ -210,9 +228,6 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
                 });
             });
         });
-
-
-
     }
 
     @Override
@@ -220,10 +235,10 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
         return listaReservas.size();
     }
 
-    public class ReservaViewHolder extends RecyclerView.ViewHolder {
+    public class PendienteViewHolder extends RecyclerView.ViewHolder {
         TextView tvCliente, tvPastel, tvFecha, tvNotas, tvEstado, tvPago, tvFechaCreacion;
         ImageView btnEditar, btnEliminar;
-        public ReservaViewHolder(@NonNull View itemView) {
+        public PendienteViewHolder(@NonNull View itemView) {
             super(itemView);
             tvCliente = itemView.findViewById(R.id.tvCliente);
             tvPastel = itemView.findViewById(R.id.tvPastel);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutFragmentReserva"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Admin.Fragments.FragmentReserva">
+
+    <!-- RecyclerView para mostrar las reservas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerReservasPendientes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        android:layout_above="@+id/fabAgregarReservaPendientes" />
+
+    <!-- Botón flotante para agregar nueva reserva -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAgregarReservaPendientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:contentDescription="Agregar reserva"
+        android:src="@android:drawable/ic_input_add"
+        android:backgroundTint="#672194" />
+</RelativeLayout>
