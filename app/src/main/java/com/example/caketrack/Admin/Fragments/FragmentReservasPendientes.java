@@ -229,9 +229,11 @@ public class FragmentReservasPendientes extends Fragment {
                 String rol = snapshot.getValue(String.class);
                 if ("admin".equals(rol)) {
                     // Mostrar botón agregar
+                    fabAgregar.setVisibility(View.GONE);
                     reservaAdapter.setEsAdmin(false);
                 } else {
                     // Ocultar botón agregar
+                    fabAgregar.setVisibility(View.GONE);
                     reservaAdapter.setEsAdmin(false);
                 }
                 reservaAdapter.notifyDataSetChanged();

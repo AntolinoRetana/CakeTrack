@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         });
         // Esperar 2.5 segundos y abrir Login
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish(); // Cierra splash
         }, 2500);
     }

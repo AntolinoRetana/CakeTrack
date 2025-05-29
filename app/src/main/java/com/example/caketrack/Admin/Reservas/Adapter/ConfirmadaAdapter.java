@@ -127,7 +127,7 @@ public class ConfirmadaAdapter extends RecyclerView.Adapter<ConfirmadaAdapter.Pe
             etNotas.setFocusable(false);
             etNotas.setClickable(false);
 
-// Spinner Cliente y Pastel igual
+            // Spinner Cliente y Pastel igual (solo lectura)
             spinnerCliente.setEnabled(false);
             spinnerPastel.setEnabled(false);
 
@@ -226,6 +226,7 @@ public class ConfirmadaAdapter extends RecyclerView.Adapter<ConfirmadaAdapter.Pe
                 });
             });
         });
+
     }
 
     @Override
