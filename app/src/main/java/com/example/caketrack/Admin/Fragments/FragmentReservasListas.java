@@ -229,7 +229,7 @@ public class FragmentReservasListas extends Fragment {
                 String rol = snapshot.getValue(String.class);
                 if ("admin".equals(rol)) {
                     // Mostrar botón agregar
-                    reservaAdapter.setEsAdmin(true);
+                    reservaAdapter.setEsAdmin(false);
                 } else {
                     // Ocultar botón agregar
                     reservaAdapter.setEsAdmin(false);

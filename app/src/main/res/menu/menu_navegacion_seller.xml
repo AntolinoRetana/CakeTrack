@@ -15,5 +15,10 @@
         android:title="Reservas"
         android:fontFamily="@font/nunitoprincipal"
         android:icon="@drawable/reservacion" />
+    <item
+        android:id="@+id/nav_logout_seller"
+        android:title="Cerrar Sesión"
+        android:fontFamily="@font/nunitoprincipal"
+        android:icon="@drawable/logout" />
 
 </menu>

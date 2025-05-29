@@ -62,7 +62,7 @@ public class ConfirmadaAdapter extends RecyclerView.Adapter<ConfirmadaAdapter.Pe
             holder.btnEliminar.setVisibility(View.GONE);
         } else {
             holder.btnEditar.setVisibility(View.VISIBLE);
-            holder.btnEliminar.setVisibility(View.VISIBLE);
+            holder.btnEliminar.setVisibility(View.GONE);
         }
 
         holder.btnEliminar.setOnClickListener(v -> {

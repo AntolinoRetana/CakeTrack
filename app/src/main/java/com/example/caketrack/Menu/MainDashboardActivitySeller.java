@@ -1,5 +1,7 @@
 package com.example.caketrack.Menu;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -14,8 +16,10 @@ import com.example.caketrack.Admin.Fragments.FragmentHome;
 import com.example.caketrack.Admin.Fragments.FragmentPastel;
 import com.example.caketrack.Admin.Fragments.FragmentReserva;
 import com.example.caketrack.Admin.Fragments.FragmentUsuario;
+import com.example.caketrack.LoginActivity;
 import com.example.caketrack.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainDashboardActivitySeller extends AppCompatActivity {
     private BottomNavigationView bottomNavigation;
@@ -49,7 +53,10 @@ public class MainDashboardActivitySeller extends AppCompatActivity {
             }
             else if (id == R.id.nav_reservas_seller) {
                 fragment = new FragmentReserva();
-            }
+            }else if (id == R.id.nav_logout_seller) {
+            logout(); // Llama al método de logout
+            return true;
+        }
             return loadFragment(fragment);
         });
 
@@ -67,4 +74,19 @@ public class MainDashboardActivitySeller extends AppCompatActivity {
         }
         return false;
     }
+    private void logout() {
+        new AlertDialog.Builder(this)
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Estás seguro de que deseas cerrar sesión?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut(); // Cierra sesión
+                    Intent intent = new Intent(this, LoginActivity.class); // Reemplaza con tu login
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Elimina historial
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
 }

@@ -14,12 +14,14 @@ import com.example.caketrack.Admin.Fragments.FragmentHome;
 //import com.example.caketrack.Admin.Fragments.FragmentPastel;
 import com.example.caketrack.Admin.Fragments.FragmentPastel;
 import com.example.caketrack.Admin.Fragments.FragmentReserva;
+import com.example.caketrack.Admin.Fragments.FragmentReservasListas;
+import com.example.caketrack.Admin.Fragments.FragmentReservasPendientes;
 import com.example.caketrack.Admin.Fragments.FragmentUsuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainDashboardActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigation;
-
+    private boolean enReservas = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,25 +41,64 @@ public class MainDashboardActivity extends AppCompatActivity {
         // Navegación entre fragmentos
         bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment fragment = null;
-            int id = item.getItemId();
 
-            if (id == R.id.nav_usuario) {
-                fragment = new FragmentUsuario();
-            } else if (id == R.id.nav_clientes) {
-               fragment = new FragmentCliente();
-            } else if (id == R.id.nav_estado) {
-               fragment = new FragmentHome();
+            if(!enReservas){
+                switch (item.getItemId()){
+                    case R.id.nav_usuario:
+                        fragment = new FragmentUsuario();
+                        break;
+                    case R.id.nav_clientes:
+                        fragment = new FragmentCliente();
+                        break;
+                        case R.id.nav_pasteles:
+                            fragment = new FragmentPastel();
+                            break;
+                    case R.id.nav_reservas:
+                        fragment = new FragmentReserva();
+                        bottomNavigation.getMenu().clear();
+                        bottomNavigation.inflateMenu(R.menu.menu_navegacion_reservas);
+                        enReservas = true;
+                        break;
+                }
             }
-            else if (id == R.id.nav_pasteles) {
-                fragment = new FragmentPastel();
+            else {
+                switch (item.getItemId()){
+                    case R.id.nav_reservas:
+                        fragment = new FragmentReserva();
+                        break;
+                    case R.id.nav_pasteles_pendiente:
+                        fragment = new FragmentReservasPendientes();
+                        break;
+                    case R.id.nav_pasteles_listas:
+                        fragment = new FragmentReservasListas();
+                        break;
+                }
             }
-            else if (id == R.id.nav_reservas) {
-                fragment = new FragmentReserva();
+            if (fragment != null) {
+                loadFragment(fragment);
             }
-            return loadFragment(fragment);
+
+//            int id = item.getItemId();
+//
+//            if (id == R.id.nav_usuario) {
+//                fragment = new FragmentUsuario();
+//            } else if (id == R.id.nav_clientes) {
+//               fragment = new FragmentCliente();
+//            } else if (id == R.id.nav_estado) {
+//               fragment = new FragmentHome();
+//            }
+//            else if (id == R.id.nav_pasteles) {
+//                fragment = new FragmentPastel();
+//            }
+//            else if (id == R.id.nav_reservas) {
+//                fragment = new FragmentReserva();
+//            }
+//            return loadFragment(fragment);
+            return true;
+
         });
 
-        bottomNavigation.setSelectedItemId(R.id.nav_usuario);
+        //bottomNavigation.setSelectedItemId(R.id.nav_usuario);
     }
 
     // Cargar el fragmento

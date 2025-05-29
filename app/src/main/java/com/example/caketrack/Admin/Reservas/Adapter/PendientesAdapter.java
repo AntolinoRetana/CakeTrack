@@ -62,7 +62,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
             holder.btnEliminar.setVisibility(View.GONE);
         } else {
             holder.btnEditar.setVisibility(View.VISIBLE);
-            holder.btnEliminar.setVisibility(View.VISIBLE);
+            holder.btnEliminar.setVisibility(View.GONE);
         }
 
 
