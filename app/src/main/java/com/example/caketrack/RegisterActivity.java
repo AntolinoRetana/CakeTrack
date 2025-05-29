@@ -90,38 +90,39 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            String uid = user.getUid();
-                            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+                            // Enviar correo de verificación
+                            user.sendEmailVerification().addOnCompleteListener(verifyTask -> {
+                                if (verifyTask.isSuccessful()) {
+                                    String uid = user.getUid();
+                                    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
-                            // Contar usuarios para generar alias único
-                            usersRef.get().addOnCompleteListener(snapshotTask -> {
-                                if (snapshotTask.isSuccessful()) {
-                                    long userCount = snapshotTask.getResult().getChildrenCount();
-                                    String alias = "usuario" + (userCount + 1);
+                                    usersRef.get().addOnCompleteListener(snapshotTask -> {
+                                        if (snapshotTask.isSuccessful()) {
+                                            long userCount = snapshotTask.getResult().getChildrenCount();
+                                            String alias = "usuario" + (userCount + 1);
+                                            Usuario userData = new Usuario(alias, nombre, rol);
+                                            DatabaseReference refUsuario = usersRef.child(uid);
 
-                                    DatabaseReference refUsuario = usersRef.child(uid);
-//                                    Map<String, Object> userData = new HashMap<>();
-//                                    userData.put("name", nombre);
-//                                    userData.put("role", rol);
-//                                    userData.put("alias", alias);
-                                     Usuario userData = new Usuario(alias, nombre, rol);
-                                     refUsuario.setValue(userData);
-
-                                    refUsuario.setValue(userData).addOnCompleteListener(dbTask -> {
-                                        if (dbTask.isSuccessful()) {
-                                            Toast.makeText(this, "Usuario creado como " + alias, Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(intent);
+                                            refUsuario.setValue(userData).addOnCompleteListener(dbTask -> {
+                                                if (dbTask.isSuccessful()) {
+                                                    Toast.makeText(this, "Verifica tu correo antes de iniciar sesión", Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(this, "Error al guardar datos del usuario", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                         } else {
-                                            Toast.makeText(this, "Error al guardar datos del usuario", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(this, "Error al obtener usuarios", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 } else {
-                                    Toast.makeText(this, "Error al obtener usuarios", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "Error al enviar correo de verificación", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
+
                     } else {
                         Toast.makeText(this, "Error al crear usuario: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
