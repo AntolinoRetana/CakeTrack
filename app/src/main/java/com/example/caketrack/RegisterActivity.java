@@ -47,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword2 = findViewById(R.id.etPassword2);
         spinnerRol = findViewById(R.id.spinnerRol);
         btnRegistrar = findViewById(R.id.btnRegistrar);
-        tvLogin = findViewById(R.id.tvLogin);
 
         mAuth = FirebaseAuth.getInstance();
 
