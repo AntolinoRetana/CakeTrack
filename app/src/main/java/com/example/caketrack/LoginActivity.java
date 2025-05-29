@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             String uid = user.getUid();
-
                             // Consultar la base de datos para obtener el rol
                             FirebaseDatabase.getInstance().getReference("users")
                                     .child(uid)

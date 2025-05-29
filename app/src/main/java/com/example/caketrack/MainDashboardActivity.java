@@ -129,8 +129,8 @@ public class MainDashboardActivity extends AppCompatActivity {
                 .setMessage("¿Estás seguro de que deseas cerrar sesión?")
                 .setPositiveButton("Sí", (dialog, which) -> {
                     FirebaseAuth.getInstance().signOut(); // Cierra sesión
-                    Intent intent = new Intent(this, LoginActivity.class); // Reemplaza con tu login
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Elimina historial
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 })

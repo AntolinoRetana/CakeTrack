@@ -123,7 +123,7 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
                     .setView(dialogView)
                     .create();
 
-            // Paso 1: Cargar clientes
+            // Cargar clientes
             FirebaseDatabase.getInstance().getReference("clientes").get().addOnSuccessListener(snapshotClientes -> {
                 for (DataSnapshot clienteSnapshot : snapshotClientes.getChildren()) {
                     String nombre = clienteSnapshot.child("nombre").getValue(String.class);
@@ -138,7 +138,7 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
                     }
                 }
 
-                // Paso 2: Cargar pasteles
+                //Cargar pasteles
                 FirebaseDatabase.getInstance().getReference("pasteles").get().addOnSuccessListener(snapshotPasteles -> {
                     for (DataSnapshot pastelSnapshot : snapshotPasteles.getChildren()) {
                         String nombre = pastelSnapshot.child("nombrePastel").getValue(String.class);
@@ -153,7 +153,7 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
                         }
                     }
 
-                    // Paso 3: Cargar estados
+                    //Cargar estados
                     listaEstados.clear();
                     listaEstados.add("pendiente");
                     listaEstados.add("confirmada");

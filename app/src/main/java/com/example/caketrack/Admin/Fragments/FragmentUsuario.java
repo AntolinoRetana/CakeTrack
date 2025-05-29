@@ -102,12 +102,12 @@ public class FragmentUsuario extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         listaUsuarios.clear();
-                        listaUIDs.clear(); // Limpia la lista de UIDs también
+                        listaUIDs.clear();
                         for (DataSnapshot userSnap : snapshot.getChildren()) {
                             Usuario u = userSnap.getValue(Usuario.class);
                             if (u != null) {
                                 listaUsuarios.add(u);
-                                listaUIDs.add(userSnap.getKey()); // Guarda el UID
+                                listaUIDs.add(userSnap.getKey());
                             }
                         }
                         usuarioAdapter.notifyDataSetChanged();

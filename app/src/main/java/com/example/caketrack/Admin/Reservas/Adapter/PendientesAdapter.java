@@ -118,7 +118,7 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
             estadoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerEstado.setAdapter(estadoAdapter);
 
-            // Bloquear edición en ciertos campos (solo lectura visible)
+            // Bloquear edición
             etFecha.setFocusable(false);
             etFecha.setClickable(false);
 
@@ -130,8 +130,6 @@ public class PendientesAdapter extends RecyclerView.Adapter<PendientesAdapter.Pe
 
             etNotas.setFocusable(false);
             etNotas.setClickable(false);
-
-            // Bloquear selección en estos spinners
             spinnerCliente.setEnabled(false);
             spinnerPastel.setEnabled(false);
 

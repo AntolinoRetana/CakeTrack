@@ -127,11 +127,10 @@ public class ConfirmadaAdapter extends RecyclerView.Adapter<ConfirmadaAdapter.Pe
             etNotas.setFocusable(false);
             etNotas.setClickable(false);
 
-            // Spinner Cliente y Pastel igual (solo lectura)
             spinnerCliente.setEnabled(false);
             spinnerPastel.setEnabled(false);
 
-            // Paso 1: Cargar clientes
+            //Cargar clientes
             FirebaseDatabase.getInstance().getReference("clientes").get().addOnSuccessListener(snapshotClientes -> {
                 for (DataSnapshot clienteSnapshot : snapshotClientes.getChildren()) {
                     String nombre = clienteSnapshot.child("nombre").getValue(String.class);
@@ -146,7 +145,7 @@ public class ConfirmadaAdapter extends RecyclerView.Adapter<ConfirmadaAdapter.Pe
                     }
                 }
 
-                // Paso 2: Cargar pasteles
+                //Cargar pasteles
                 FirebaseDatabase.getInstance().getReference("pasteles").get().addOnSuccessListener(snapshotPasteles -> {
                     for (DataSnapshot pastelSnapshot : snapshotPasteles.getChildren()) {
                         String nombre = pastelSnapshot.child("nombrePastel").getValue(String.class);
@@ -161,7 +160,7 @@ public class ConfirmadaAdapter extends RecyclerView.Adapter<ConfirmadaAdapter.Pe
                         }
                     }
 
-                    // Paso 3: Cargar estados (mejor usar estado predefinido)
+                    //Cargar estados (mejor usar estado predefinido)
                     listaEstados.clear();
                     listaEstados.add("Pendiente");
                     listaEstados.add("Confirmada");

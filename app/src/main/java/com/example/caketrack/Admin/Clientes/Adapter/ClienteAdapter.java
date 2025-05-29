@@ -105,7 +105,7 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ClienteV
                     .setView(dialogView)
                     .create(); // No uses setPositiveButton aquí
 
-            // Obtener botones del diseño y asignar lógica
+
             dialogView.findViewById(R.id.btnGuardar).setOnClickListener(view -> {
                 Cliente actualizado = new Cliente(
                         etNombre.getText().toString().trim(),
