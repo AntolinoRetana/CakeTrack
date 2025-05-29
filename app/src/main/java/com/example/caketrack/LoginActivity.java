@@ -58,6 +58,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = miAuth.getCurrentUser();
                         if (user != null) {
+                            if (!user.isEmailVerified()) {
+                                Toast.makeText(this, "Verifica tu correo electrónico antes de iniciar sesión", Toast.LENGTH_LONG).show();
+                                FirebaseAuth.getInstance().signOut(); // cerrar sesión
+                                return;
+                            }
+
                             String uid = user.getUid();
 
                             // Consultar la base de datos para obtener el rol
@@ -87,8 +93,8 @@ public class LoginActivity extends AppCompatActivity {
                                     .addOnFailureListener(e -> {
                                         Toast.makeText(this, "Error al obtener rol", Toast.LENGTH_SHORT).show();
                                     });
-
                         }
+
                     } else {
                         Toast.makeText(this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }

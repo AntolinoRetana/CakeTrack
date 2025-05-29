@@ -53,6 +53,15 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
         holder.tvNombre.setText(usuario.getName());
         holder.tvRol.setText("Rol: " + usuario.getRole());
 
+        if (usuario.getRole().equals("admin")) {
+            holder.imgRol.setImageResource(R.drawable.admin);
+        } else if (usuario.getRole().equals("seller")) {
+            holder.imgRol.setImageResource(R.drawable.seller);
+        }
+        else if (usuario.getRole().equals("production")) {
+            holder.imgRol.setImageResource(R.drawable.chef);
+        }
+
         holder.btnEditar.setOnClickListener(v -> mostrarDialogoEditarRol(uid, usuario.getRole()));
         holder.btnEliminar.setOnClickListener(v -> confirmarEliminarUsuario(uid));
     }
@@ -63,8 +72,8 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
     }
 
     public class UsuarioViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvNombre, tvAlias, tvRol;
-        private ImageView btnEditar, btnEliminar;
+        private TextView tvNombre, tvRol;
+        private ImageView btnEditar, btnEliminar, imgRol;
 
         public UsuarioViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,6 +81,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
             tvRol = itemView.findViewById(R.id.tvRol);
             btnEditar = itemView.findViewById(R.id.btnEditar);
             btnEliminar = itemView.findViewById(R.id.btnEliminar);
+            imgRol = itemView.findViewById(R.id.imgRol);
         }
     }
     private void mostrarDialogoEditarRol(String uid, String rolActual) {
