@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_reservas"
-        android:title="Reservas"
-        android:fontFamily="@font/nunitoprincipal"
-        android:icon="@drawable/reservacion" />
-    <item
         android:id="@+id/nav_pasteles_pendiente"
         android:title="Reservas pendientes"
         android:fontFamily="@font/nunitoprincipal"
@@ -15,4 +10,9 @@
         android:title="Reservas listas"
         android:fontFamily="@font/nunitoprincipal"
         android:icon="@drawable/reservation_ready" />
+    <item
+        android:id="@+id/nav_log_out_production"
+        android:title="Cerrar Sesión"
+        android:fontFamily="@font/nunitoprincipal"
+        android:icon="@drawable/logout" />
 </menu>

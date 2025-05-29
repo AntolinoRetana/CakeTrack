@@ -1,5 +1,7 @@
 package com.example.caketrack;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +20,7 @@ import com.example.caketrack.Admin.Fragments.FragmentReservasListas;
 import com.example.caketrack.Admin.Fragments.FragmentReservasPendientes;
 import com.example.caketrack.Admin.Fragments.FragmentUsuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainDashboardActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigation;
@@ -59,6 +62,9 @@ public class MainDashboardActivity extends AppCompatActivity {
                         bottomNavigation.inflateMenu(R.menu.menu_navegacion_reservas);
                         enReservas = true;
                         break;
+                    case R.id.nav_log_out_admin:
+                        logout(); // Llama al método de logout
+                        return true;
                 }
             }
             else {
@@ -116,5 +122,19 @@ public class MainDashboardActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+    private void logout() {
+        new AlertDialog.Builder(this)
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Estás seguro de que deseas cerrar sesión?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut(); // Cierra sesión
+                    Intent intent = new Intent(this, LoginActivity.class); // Reemplaza con tu login
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Elimina historial
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 }

@@ -48,13 +48,11 @@ public class MainDashboardActivitySeller extends AppCompatActivity {
                 fragment = new FragmentCliente();
             } else if (id == R.id.nav_pasteles_seller) {
                 fragment = new FragmentPastel();
-            } else if (id == R.id.nav_estado) {
-                fragment = new FragmentHome();
             }
             else if (id == R.id.nav_reservas_seller) {
                 fragment = new FragmentReserva();
             }else if (id == R.id.nav_logout_seller) {
-            logout(); // Llama al método de logout
+            logout();
             return true;
         }
             return loadFragment(fragment);

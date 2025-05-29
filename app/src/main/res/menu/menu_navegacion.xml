@@ -21,8 +21,8 @@
         android:fontFamily="@font/nunitoprincipal"
         android:icon="@drawable/reservacion" />
     <item
-        android:id="@+id/nav_estado"
-        android:title="Estado"
+        android:id="@+id/nav_log_out_admin"
+        android:title="Salir"
         android:fontFamily="@font/nunitoprincipal"
-        android:icon="@drawable/progress" />
+        android:icon="@drawable/logout" />
 </menu>
